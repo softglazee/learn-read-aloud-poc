@@ -14,6 +14,7 @@
     --free:#00733e; --commercial:#8a5a00; --ref:#3858e9; --warn:#b32d2e;
   }
   *{box-sizing:border-box}
+  [hidden]{display:none!important}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--ink);
     font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -22,83 +23,88 @@
   a:hover{text-decoration:underline}
   img{max-width:100%}
 
-  /* proof-of-concept ribbon */
-  .ribbon{background:#fcf3cd;color:#5c4a00;font-size:.82rem;text-align:center;
-    padding:7px 14px;border-bottom:1px solid #e6c200}
+  .ribbon{background:#fcf3cd;color:#5c4a00;font-size:.82rem;text-align:center;padding:7px 14px;border-bottom:1px solid #e6c200}
   .ribbon strong{font-weight:700}
 
-  /* global header */
   header.site{background:var(--header);color:#fff}
-  .site-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;
-    padding:12px 20px}
+  .site-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:12px 20px}
   .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap}
   .brand svg{width:28px;height:28px;fill:#fff}
   nav.site-nav{display:flex;gap:20px;flex-wrap:wrap;font-size:.92rem}
   nav.site-nav a{color:#d7d9db}
   nav.site-nav a:hover{color:#fff;text-decoration:none}
   .site-spacer{margin-left:auto}
-  .searchbox{background:#2c3338;border:1px solid #3c434a;border-radius:4px;color:#a7aaad;
-    font-size:.85rem;padding:6px 12px;display:flex;align-items:center;gap:8px}
+  .searchbox{background:#2c3338;border:1px solid #3c434a;border-radius:4px;color:#a7aaad;font-size:.85rem;padding:6px 12px}
 
   main{max-width:820px;margin:0 auto;padding:0 20px}
   .crumbs{font-size:.85rem;color:var(--muted);padding:18px 0 0}
   .crumbs a{color:var(--muted)}
 
-  .eyebrow{color:var(--wp);font-weight:700;font-size:.78rem;letter-spacing:.08em;
-    text-transform:uppercase;margin:22px 0 6px}
+  .eyebrow{color:var(--wp);font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;margin:22px 0 6px}
   h1.lesson-title{font-size:2.1rem;line-height:1.2;margin:0 0 12px}
-  .lesson-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;
-    border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:8px}
+  .lesson-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:8px}
   .lesson-meta .who{font-weight:600;color:var(--ink)}
+  .lesson-body h2{font-size:1.4rem;margin:30px 0 8px}
+  .lesson-body p{margin:12px 0}
+  .textonly-flag{display:inline-block;font-size:.72rem;font-weight:700;color:#5c4a00;background:#fcf3cd;border:1px solid #e6c200;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:.03em}
 
-  /* the proposed feature: Listen bar */
+  /* read-aloud player (browser voice) */
   .listen{border:1px solid #c9d4ff;background:#f3f6ff;border-radius:10px;padding:16px 18px;margin:20px 0}
   .listen .lead{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;margin-bottom:2px}
   .listen .lead .spk{font-size:1.3rem}
   .listen .hint{font-size:.82rem;color:var(--muted);margin:0 0 12px}
-  .listen .free{display:inline-block;font-size:.68rem;font-weight:700;color:var(--free);
-    background:#e6f4ea;border:1px solid #79c497;border-radius:999px;padding:1px 8px;margin-left:6px;
-    text-transform:uppercase;letter-spacing:.04em;vertical-align:middle}
-  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  button.play{background:var(--wp);color:#fff;border:1px solid var(--wp-dark);border-radius:4px;
-    padding:10px 18px;font-size:.95rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
-    font-family:inherit}
-  button.play:hover{background:var(--wp-dark)}
-  button.play:disabled{background:#c3c4c7;border-color:#c3c4c7;cursor:not-allowed}
-  button.stop{background:#fff;color:var(--warn);border:1px solid var(--warn)}
-  button.stop:hover{background:#fcebec}
-  select,input[type=range]{font-size:.88rem;font-family:inherit}
+  .free{display:inline-block;font-size:.68rem;font-weight:700;color:var(--free);background:#e6f4ea;border:1px solid #79c497;border-radius:999px;padding:1px 8px;margin-left:6px;text-transform:uppercase;letter-spacing:.04em;vertical-align:middle}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  button.btn{border-radius:4px;padding:9px 16px;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:1px solid transparent}
+  button.primary{background:var(--wp);color:#fff;border-color:var(--wp-dark);min-width:150px;justify-content:center}
+  button.primary:hover{background:var(--wp-dark)}
+  button.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  button.ghost:hover{background:#f0f0f1}
+  button.danger{background:#fff;color:var(--warn);border-color:var(--warn)}
+  button.danger:hover{background:#fcebec}
+  button.btn:disabled{opacity:.5;cursor:not-allowed}
+  select,input[type=range],textarea{font-size:.88rem;font-family:inherit}
   select{padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:#fff;max-width:100%}
   label.ctl{font-size:.82rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
-  .status{font-size:.83rem;color:var(--muted);margin:10px 0 0;min-height:1.2em}
+  .status{font-size:.83rem;color:var(--muted);margin:10px 0 0;min-height:1.2em;display:flex;align-items:center;gap:8px}
   .status.err{color:var(--warn);font-weight:600}
+  .splayer[data-state="playing"] .status::before,
+  .splayer[data-state="paused"] .status::before{content:"";width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .splayer[data-state="playing"] .status::before{background:var(--free);animation:pulse 1s infinite}
+  .splayer[data-state="paused"] .status::before{background:var(--commercial)}
+  @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+  .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
 
-  /* video */
   .video-wrap{position:relative;padding-top:56.25%;margin:20px 0;border-radius:10px;overflow:hidden;background:#000}
   .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
-  .lesson-body h2{font-size:1.4rem;margin:30px 0 8px}
-  .lesson-body p{margin:12px 0}
+  /* explainer */
+  .explain{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:26px 0}
+  .explain h2{margin-top:0;font-size:1.5rem}
+  .explain h3{font-size:1.05rem;margin:18px 0 4px}
+  .explain p{margin:6px 0}
+  .explain ul{margin:6px 0;padding-left:20px}
+  .detect{background:#f3f6ff;border:1px solid #c9d4ff;border-radius:8px;padding:8px 12px;font-size:.85rem;color:#2145c9;margin:12px 0}
+  textarea.trytext{width:100%;min-height:74px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;line-height:1.6;resize:vertical}
 
-  /* PoC comparison section */
+  /* PoC section */
   .poc{background:var(--soft);border-top:1px solid var(--line);margin-top:44px;padding:8px 0 50px}
   .poc-inner{max-width:820px;margin:0 auto;padding:0 20px}
   .poc h2{font-size:1.6rem;margin:30px 0 6px}
   .poc .sub{color:var(--muted);margin-top:0}
   .passage{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:14px 0}
   .passage .en{font-size:1.05rem}
-  .passage .ur{direction:rtl;text-align:right;font-size:1.4rem;line-height:2.2;
-    font-family:"Noto Nastaliq Urdu",serif}
-  .row{border:1px solid var(--line);border-left-width:5px;border-radius:6px;padding:14px 16px;margin:12px 0;background:#fff}
-  .row.free{border-left-color:var(--free)}
-  .row.commercial{border-left-color:var(--commercial)}
-  .row.ref{border-left-color:var(--ref)}
-  .row h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1.02rem}
+  .passage .ur{direction:rtl;text-align:right;font-size:1.4rem;line-height:2.2;font-family:"Noto Nastaliq Urdu",serif}
+  .rowc{border:1px solid var(--line);border-left-width:5px;border-radius:6px;padding:14px 16px;margin:12px 0;background:#fff}
+  .rowc.free{border-left-color:var(--free)}
+  .rowc.commercial{border-left-color:var(--commercial)}
+  .rowc.ref{border-left-color:var(--ref)}
+  .rowc h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1.02rem}
   .tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:4px}
   .tag.free{background:#e6f4ea;color:var(--free)}
   .tag.commercial{background:#fbf0da;color:var(--commercial)}
   .tag.ref{background:#e9edff;color:var(--ref)}
-  .row .note{font-size:.85rem;color:var(--muted);margin:2px 0 8px}
+  .rowc .note{font-size:.85rem;color:var(--muted);margin:2px 0 8px}
   audio{width:100%;margin-top:8px}
   table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:8px;background:#fff}
   th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
@@ -107,8 +113,7 @@
   .rec{background:#eef6f0;border:1px solid #a7d3b6;border-radius:8px;padding:16px 18px;margin-top:14px}
   .disclaimer{background:#fcf3cd;border:1px solid #e6c200;border-radius:8px;padding:16px 18px;margin-top:14px}
 
-  /* footer */
-  footer.site{background:var(--footer);color:#c3c4c7;margin-top:0;padding:34px 20px 40px}
+  footer.site{background:var(--footer);color:#c3c4c7;padding:34px 20px 40px}
   .foot-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .foot-inner svg{width:30px;height:30px;fill:#fff}
   .foot-inner .tag-line{font-style:italic;color:#a7aaad}
@@ -116,11 +121,8 @@
   .foot-inner .foot-links a{color:#c3c4c7}
   .credit{max-width:1100px;margin:16px auto 0;font-size:.8rem;color:#8c8f94;padding:0 20px}
 
-  @media (max-width:600px){
-    h1.lesson-title{font-size:1.6rem}
-    nav.site-nav{display:none}
-  }
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  @media (max-width:600px){ h1.lesson-title{font-size:1.6rem} nav.site-nav{display:none} button.primary{min-width:0} }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} .splayer .status::before{animation:none!important} }
 </style>
 </head>
 <body>
@@ -136,12 +138,7 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 7.03c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .923-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/></svg>
       Learn WordPress
     </span>
-    <nav class="site-nav">
-      <a href="#">Courses</a>
-      <a href="#">Lessons</a>
-      <a href="#">Tutorials</a>
-      <a href="#">Online Workshops</a>
-    </nav>
+    <nav class="site-nav"><a href="#">Courses</a><a href="#">Lessons</a><a href="#">Tutorials</a><a href="#">Online Workshops</a></nav>
     <span class="site-spacer"></span>
     <span class="searchbox">Search</span>
   </div>
@@ -150,103 +147,181 @@
 <main>
   <div class="crumbs"><a href="#">Learn</a> &rsaquo; <a href="#">Tutorials</a> &rsaquo; Intro to Block Patterns</div>
 
-  <p class="eyebrow">Tutorial</p>
+  <!-- LESSON 1: has a video -->
+  <p class="eyebrow">Tutorial &middot; has video</p>
   <h1 class="lesson-title">Intro to Block Patterns</h1>
-  <div class="lesson-meta">
-    <span class="who">Erica Varlese</span>
-    <span>14 minutes</span>
-    <span>Level: Intermediate</span>
-    <span>Publishing with the Block Editor</span>
-  </div>
+  <div class="lesson-meta"><span class="who">Erica Varlese</span><span>14 minutes</span><span>Level: Intermediate</span></div>
 
-  <!-- THE PROPOSED FEATURE -->
-  <section class="listen" aria-label="Listen to this lesson">
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" aria-label="Listen to this lesson">
     <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; plays on your device</span></div>
-    <p class="hint">This is the feature under discussion: a play button that reads the lesson text aloud using the browser's own voices. Nothing is sent anywhere, and it costs nothing.</p>
+    <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. It shows Play, Pause, Resume, Restart and Stop, so you always know what state it is in.</p>
     <div class="controls">
-      <button class="play" data-lang="en" data-textid="lessonBody" data-action="speak">&#9654; Listen to this lesson</button>
-      <button class="play stop" data-action="stop">&#9632; Stop</button>
+      <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
+      <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
+      <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
+    </div>
+    <div class="row2">
       <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
       <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
     </div>
-    <p class="status" data-status="en" role="status" aria-live="polite"></p>
+    <p class="status" data-status role="status" aria-live="polite"></p>
   </section>
 
-  <div class="video-wrap">
-    <iframe title="Intro to Block Patterns (VideoPress)" src="https://video.wordpress.com/embed/g4Q6MkSO?hd=1" allowfullscreen allow="clipboard-write"></iframe>
-  </div>
+  <div class="video-wrap"><iframe title="Intro to Block Patterns (VideoPress)" src="https://video.wordpress.com/embed/g4Q6MkSO?hd=1" allowfullscreen allow="clipboard-write"></iframe></div>
 
-  <div class="lesson-body" id="lessonBody">
+  <div class="lesson-body" id="lesson1Body">
     <p>If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p>
     <p>A block pattern is a ready-made arrangement of blocks that you can insert into a post or page in one step, then adjust to your needs. Patterns save you from building common layouts, like a call to action, a gallery, or a pricing table, block by block every time.</p>
     <p>You add a pattern the same way you add any block, through the inserter, then edit the text and images inside it. Because a pattern is just blocks, everything you already know about moving and styling blocks still applies.</p>
   </div>
 
-  <p style="font-size:.85rem;color:var(--muted);margin-top:8px">The paragraphs above are the lesson text the Listen button reads. The first one is the exact passage compared below.</p>
+  <hr style="border:0;border-top:1px solid var(--line);margin:44px 0">
+
+  <!-- LESSON 2: text only, no video -->
+  <p class="eyebrow">Lesson &middot; <span class="textonly-flag">text based, no video</span></p>
+  <h1 class="lesson-title">Introduction to WordPress</h1>
+  <div class="lesson-meta"><span class="who">Beginner WordPress User</span><span>Module 1 of 7</span><span>Level: Beginner</span></div>
+
+  <p style="color:var(--muted);font-size:.92rem;margin:14px 0 0">Many Learn lessons are written text with no video lecture. Read-aloud matters most here, because there is no narration at all today. The same free button works on plain lesson text.</p>
+
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" aria-label="Listen to this text lesson">
+    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; plays on your device</span></div>
+    <p class="hint">A text-only lesson read aloud by the browser. No video was ever recorded for it.</p>
+    <div class="controls">
+      <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
+      <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
+      <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
+    </div>
+    <div class="row2">
+      <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
+      <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
+    </div>
+    <p class="status" data-status role="status" aria-live="polite"></p>
+  </section>
+
+  <div class="lesson-body" id="lesson2Body">
+    <p>Hi, and welcome to this introduction to WordPress. In this lesson, we'll delve into the basics, helping you understand what you can achieve with WordPress, even if you're a beginner.</p>
+    <p>At its core, WordPress empowers you to create your own website or blog. Millions of websites have been built using WordPress, ranging from online stores and small businesses to renowned entities like NASA, the Walt Disney Company, and the Facebook Newsroom.</p>
+    <p>WordPress is a CMS, or content management system. In simple terms, it is a free tool that helps you create, edit, and manage your own website or blog without needing to learn code.</p>
+  </div>
+
+  <!-- ABOUT THE BROWSER VOICE + UNIVERSAL TESTER -->
+  <div class="explain">
+    <h2>About the "browser voice" (the free, native option)</h2>
+    <p>The free option above does not use any online service. It uses the <strong>Web Speech API</strong>, a text-to-speech engine built into every modern browser (Chrome, Edge, Safari, Firefox). When you press play, the browser reads the text using the voices that are already installed on your own computer or phone.</p>
+
+    <h3>Why it suits WordPress.org</h3>
+    <ul>
+      <li><strong>Free.</strong> No account, no per-word billing.</li>
+      <li><strong>Private.</strong> The text never leaves your device. Nothing is sent to any server.</li>
+      <li><strong>No dependency.</strong> It ships as a small plugin, with no third-party service to pay for or review.</li>
+    </ul>
+
+    <h3>What to keep in mind</h3>
+    <ul>
+      <li>Voice quality depends on the device and operating system, so two people may hear different voices.</li>
+      <li>Coverage for non-English languages is uneven, and for some (like Urdu) most devices have no voice at all. The Urdu test further down shows this honestly.</li>
+    </ul>
+
+    <h3>Try it with your own device, in any language you have</h3>
+    <p>This page reads the list of voices installed in <em>your</em> browser, so you can test it in whatever languages your device supports. Pick a language, pick a voice, edit the text if you like, and press play.</p>
+
+    <div class="detect" id="detectSummary">Checking which voices are installed in your browser ...</div>
+
+    <section class="splayer" data-state="idle" data-lang="auto" aria-label="Try the browser voice">
+      <div class="row2">
+        <label class="ctl">Language <select class="langPicker"></select></label>
+        <label class="ctl">Voice <select class="voicePicker" data-langfilter="auto"></select></label>
+        <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
+      </div>
+      <textarea class="trytext" spellcheck="false">The block editor turns your content into blocks. You add a block, move it, and change its settings. This sentence is being read by your own device, with no service behind it.</textarea>
+      <div class="controls" style="margin-top:10px">
+        <button class="btn primary" data-act="toggle">&#9654; Play</button>
+        <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
+        <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
+      </div>
+      <p class="status" data-status role="status" aria-live="polite"></p>
+    </section>
+  </div>
 </main>
 
 <!-- PROOF OF CONCEPT COMPARISON -->
 <section class="poc">
   <div class="poc-inner">
     <h2>Proof of concept: how should read-aloud sound?</h2>
-    <p class="sub">The section above shows the free, browser-native feature working on a real lesson. This section compares that free voice against a commercial voice and the lesson's own narrator, so the team can decide how far to go. Everything here is for comparison only.</p>
+    <p class="sub">The lessons above show the free, browser-native feature working. This section compares that free voice against a commercial voice and the lesson's own narrator. For the commercial voice you can switch between several male and female options. Everything here is for comparison only.</p>
 
-    <h3 style="margin-top:24px">English, the same passage three ways</h3>
+    <h3 style="margin-top:24px">English, the same passage</h3>
     <div class="passage"><p class="en" id="enPassage">If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p></div>
 
-    <div class="row free">
+    <div class="rowc free splayer" data-state="idle" data-lang="en" data-textid="enPassage" data-label="Play browser voice">
       <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
       <p class="note">Web Speech API. No service, no account, no cost. Uses the voices already on this device.</p>
       <div class="controls">
-        <button class="play" data-lang="en" data-textid="enPassage" data-action="speak">&#9654; Play browser voice</button>
-        <button class="play stop" data-action="stop">&#9632; Stop</button>
+        <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
+        <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
+        <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
         <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
       </div>
-      <p class="status" data-status="en2" role="status" aria-live="polite"></p>
+      <p class="status" data-status role="status" aria-live="polite"></p>
     </div>
 
-    <div class="row commercial">
+    <div class="rowc commercial">
       <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
-      <p class="note">Pre-generated with ElevenLabs, voice "Bella", model Eleven Multilingual v2. Settings are in the table below.</p>
-      <audio controls preload="none"><source src="audio/en-commercial.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
+      <p class="note">Pre-generated with ElevenLabs. Choose a voice:
+        <select class="voiceSelect" data-target="enAudio" data-prefix="en" aria-label="English commercial voice">
+          <option value="bella">Bella (Female)</option>
+          <option value="sarah">Sarah (Female)</option>
+          <option value="eric">Eric (Male)</option>
+          <option value="george">George (Male, British)</option>
+        </select>
+      </p>
+      <audio id="enAudio" controls preload="none"><source src="audio/en-bella.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
     </div>
 
-    <div class="row ref">
+    <div class="rowc ref">
       <h3>Original video audio <span class="tag ref">Reference</span></h3>
       <p class="note">The lesson's own narrator, Erica Varlese, at 0:33 to 0:44 of the video above.</p>
       <audio controls preload="none"><source src="audio/en-video-reference.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
     </div>
 
     <h3 style="margin-top:34px">Non-English: Urdu</h3>
-    <p class="sub">This is where the decision bites. Urdu is right-to-left, and most devices ship no Urdu voice at all, so the free browser route below will usually report that it cannot speak it. This is not hypothetical for Learn: the lesson <em>Introduction to WordPress</em> is already translated into Urdu in <a href="https://github.com/WordPress/Learn/issues/3613">Learn #3613</a>. The passage below is that reviewed community translation.</p>
+    <p class="sub">Urdu is right-to-left, and most devices ship no Urdu voice at all, so the free browser route below usually reports that it cannot speak it. This is not hypothetical for Learn: the lesson <em>Introduction to WordPress</em> is already translated into Urdu in <a href="https://github.com/WordPress/Learn/issues/3613">Learn #3613</a>. The passage below is that reviewed community translation.</p>
     <div class="passage"><p class="ur" id="urPassage" lang="ur" dir="rtl">سلام، اور WordPress کے اس تعارفی سبق میں خوش آمدید۔ اس سبق میں ہم بنیادی باتوں کا جائزہ لیں گے تاکہ آپ سمجھ سکیں کہ WordPress سے کیا کچھ حاصل کیا جا سکتا ہے، چاہے آپ بالکل نئے ہی کیوں نہ ہوں۔</p></div>
 
-    <div class="row free">
+    <div class="rowc free splayer" data-state="idle" data-lang="ur" data-textid="urPassage" data-label="Play browser voice">
       <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
       <div class="controls">
-        <button class="play" data-lang="ur" data-textid="urPassage" data-action="speak">&#9654; Play browser voice</button>
-        <button class="play stop" data-action="stop">&#9632; Stop</button>
+        <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
+        <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
+        <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
         <label class="ctl">Voice <select class="voicePicker" data-langfilter="ur"></select></label>
       </div>
-      <p class="status" data-status="ur" role="status" aria-live="polite"></p>
+      <p class="status" data-status role="status" aria-live="polite"></p>
     </div>
 
-    <div class="row commercial">
+    <div class="rowc commercial">
       <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
-      <p class="note">Pre-generated with ElevenLabs, model Eleven v3 (the model that covers Urdu). Voice: Bella.</p>
-      <audio controls preload="none"><source src="audio/ur-commercial.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
+      <p class="note">Pre-generated with ElevenLabs (model Eleven v3, which covers Urdu). Choose a voice:
+        <select class="voiceSelect" data-target="urAudio" data-prefix="ur" aria-label="Urdu commercial voice">
+          <option value="bella">Bella (Female)</option>
+          <option value="sarah">Sarah (Female)</option>
+          <option value="eric">Eric (Male)</option>
+          <option value="george">George (Male)</option>
+        </select>
+      </p>
+      <audio id="urAudio" controls preload="none"><source src="audio/ur-bella.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
     </div>
 
     <h2 style="margin-top:38px">How each sample was produced</h2>
     <p class="sub">Stated so anyone can reproduce or challenge every clip.</p>
     <table>
-      <thead><tr><th>Sample</th><th>Route</th><th>Service / voice</th><th>Settings</th><th>Cost</th></tr></thead>
+      <thead><tr><th>Sample</th><th>Route</th><th>Service / voices</th><th>Settings</th><th>Cost</th></tr></thead>
       <tbody>
-        <tr><td>English, browser</td><td>Web Speech API</td><td>Device voice (shown in picker)</td><td>Default rate and pitch</td><td>Free</td></tr>
-        <tr><td>English, commercial</td><td>ElevenLabs, static file</td><td>Bella</td><td>eleven_multilingual_v2; stability 0.5, similarity 0.75; MP3 128 kbps</td><td>Free tier</td></tr>
+        <tr><td>Browser voice</td><td>Web Speech API</td><td>Whatever is installed on the device</td><td>Default pitch; adjustable speed</td><td>Free</td></tr>
+        <tr><td>English, commercial</td><td>ElevenLabs, static files</td><td>Bella, Sarah (female); Eric, George (male)</td><td>eleven_multilingual_v2; stability 0.5, similarity 0.75; MP3 128 kbps</td><td>Free tier</td></tr>
         <tr><td>English, reference</td><td>From the lesson video</td><td>Erica Varlese (Intro to Block Patterns)</td><td>0:33.8 to 0:44.3, unedited, mono MP3</td><td>n/a</td></tr>
-        <tr><td>Urdu, browser</td><td>Web Speech API</td><td>Device Urdu voice if present, else none</td><td>lang <code>ur-PK</code></td><td>Free</td></tr>
-        <tr><td>Urdu, commercial</td><td>ElevenLabs, static file</td><td>Bella</td><td>eleven_v3; MP3 128 kbps</td><td>Free tier</td></tr>
+        <tr><td>Urdu, commercial</td><td>ElevenLabs, static files</td><td>Bella, Sarah (female); Eric, George (male)</td><td>eleven_v3; MP3 128 kbps</td><td>Free tier</td></tr>
       </tbody>
     </table>
 
@@ -255,16 +330,14 @@
       <ul style="margin:0;padding-left:20px">
         <li><strong>Default to the free browser-native route.</strong> No cost, no third-party dependency, no data leaves the device, no privacy review. It ships as a small plugin and is the only route that fits WordPress.org infrastructure without a procurement decision.</li>
         <li><strong>For high-value lessons and for non-English, allow pre-generated static audio files.</strong> Made once, committed like any other asset. Commercial quality, still no live paid API and no billing on wp.org.</li>
+        <li><strong>Text-only lessons are where this helps most,</strong> because there is no narration at all today, and text can be corrected in minutes where a video cannot.</li>
         <li><strong>Keep the live commercial API as a comparison only,</strong> not as the thing we install.</li>
-        <li><strong>Lead with the maintenance case:</strong> read-aloud text can be corrected in minutes, a produced video cannot be corrected without reshooting.</li>
         <li><strong>Urdu answers the English-only versus all-locales question with evidence:</strong> the browser route cannot speak it on a typical device, so translated content realistically needs the pre-generated-file route.</li>
       </ul>
     </div>
 
     <h2 style="margin-top:34px">What this demo is and is not</h2>
-    <div class="disclaimer">
-      <p style="margin:0">This is a demonstration to make the discussion concrete. It is <strong>not</strong> a proposal to install any service on WordPress.org, which would be a Meta team decision. The commercial clips were produced on a personal free-tier allowance purely to illustrate quality, with the exact service, voice and settings stated above so the comparison is reproducible.</p>
-    </div>
+    <div class="disclaimer"><p style="margin:0">This is a demonstration to make the discussion concrete. It is <strong>not</strong> a proposal to install any service on WordPress.org, which would be a Meta team decision. The commercial clips were produced on a personal free-tier allowance purely to illustrate quality, with the exact service, voices and settings stated above so the comparison is reproducible.</p></div>
   </div>
 </section>
 
@@ -272,11 +345,7 @@
   <div class="foot-inner">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 7.03c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .923-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/></svg>
     <span class="tag-line">Code is Poetry.</span>
-    <span class="foot-links">
-      <a href="https://github.com/WordPress/Learn/issues/3649">Issue #3649</a>
-      <a href="https://github.com/WordPress/Learn/issues/3613">Urdu course #3613</a>
-      <a href="https://profiles.wordpress.org/softglaze/">@softglaze</a>
-    </span>
+    <span class="foot-links"><a href="https://github.com/WordPress/Learn/issues/3649">Issue #3649</a><a href="https://github.com/WordPress/Learn/issues/3613">Urdu course #3613</a><a href="https://profiles.wordpress.org/softglaze/">@softglaze</a></span>
   </div>
   <p class="credit">Proof of concept for Learn WordPress issue #3649. Built by Azhar Ali (@softglaze). Vanilla HTML, CSS and JavaScript, no build step, no dependencies. Not affiliated with or endorsed by the WordPress project; the WordPress logo is used here only to show the feature in context.</p>
 </footer>
@@ -286,72 +355,199 @@
   "use strict";
   var synth = window.speechSynthesis;
   var supported = !!synth && typeof window.SpeechSynthesisUtterance === "function";
-  var pickers = Array.prototype.slice.call(document.querySelectorAll(".voicePicker"));
+  var voicesByName = {};
 
-  function setStatus(key, msg, isErr){
-    document.querySelectorAll('[data-status="'+key+'"]').forEach(function(el){
-      el.textContent = msg || ""; el.classList.toggle("err", !!isErr);
-    });
-  }
-  function voicesForFilter(f){
-    return synth.getVoices().filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(f.toLowerCase())===0; });
-  }
-  function populate(){
-    pickers.forEach(function(sel){
-      var filter = sel.getAttribute("data-langfilter");
-      var voices = voicesForFilter(filter);
-      sel.innerHTML = "";
-      if(!voices.length){
-        var o=document.createElement("option"); o.textContent="No "+filter.toUpperCase()+" voice on this device"; o.value=""; sel.appendChild(o); sel.disabled=true;
-        if(filter==="ur"){ setStatus("ur","This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows.",true); }
-        return;
+  /* ---------- speech controller (one at a time, real state machine) ---------- */
+  var token = 0, active = null, curState = "idle";
+
+  function chunkText(t){
+    t = (t||"").replace(/\s+/g," ").trim();
+    if(!t) return [];
+    var sentences = t.match(/[^.!?؟۔]+[.!?؟۔]*/g) || [t];
+    var out = [];
+    sentences.forEach(function(s){
+      s = s.trim(); if(!s) return;
+      while(s.length > 200){
+        var cut = s.lastIndexOf(" ", 200); if(cut < 80) cut = 200;
+        out.push(s.slice(0, cut).trim()); s = s.slice(cut).trim();
       }
-      sel.disabled=false;
-      voices.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=v.name+"  ("+v.lang+")"; sel.appendChild(o); });
+      if(s) out.push(s);
     });
+    return out.length ? out : [t];
   }
-  function statusKeyFor(btn){
-    var row = btn.closest(".listen, .row");
-    var st = row ? row.querySelector("[data-status]") : null;
-    return st ? st.getAttribute("data-status") : (btn.getAttribute("data-lang")||"en");
+
+  function stopAll(){
+    token++; curState = "idle";
+    var prev = active; active = null;
+    if(supported){ try{ synth.cancel(); }catch(e){} }
+    if(prev) prev.render("idle");
   }
-  function speak(btn){
-    if(!supported){ setStatus(statusKeyFor(btn),"This browser does not support the Web Speech API.",true); return; }
-    synth.cancel();
-    var lang = btn.getAttribute("data-lang");
-    var el = document.getElementById(btn.getAttribute("data-textid"));
-    var text = el ? el.textContent.replace(/\s+/g," ").trim() : "";
-    var key = statusKeyFor(btn);
-    if(!text){ setStatus(key,"No text to read.",true); return; }
-    var row = btn.closest(".listen, .row");
-    var picker = row ? row.querySelector(".voicePicker") : null;
-    var rateEl = row ? row.querySelector(".rate") : null;
-    if(picker && picker.disabled){ setStatus(key,"No suitable voice is available on this device for this language.",true); return; }
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = (lang==="ur") ? "ur-PK" : "en-US";
-    if(rateEl){ u.rate = parseFloat(rateEl.value)||1; }
-    if(picker && picker.value){
-      var chosen = synth.getVoices().filter(function(v){ return v.name===picker.value; })[0];
-      if(chosen){ u.voice=chosen; u.lang=chosen.lang; }
+
+  function start(p){
+    stopAll();
+    var mine = ++token;
+    var chunks = chunkText(p.getText());
+    if(!chunks.length){ p.render("idle","Nothing to read.",true); return; }
+    active = p; curState = "playing"; p.render("playing");
+    var i = 0;
+    (function next(){
+      if(mine !== token) return;
+      if(i >= chunks.length){ curState="idle"; active=null; p.render("idle","Finished."); return; }
+      var u = new SpeechSynthesisUtterance(chunks[i]);
+      var o = p.getOpts();
+      u.lang = o.lang; if(o.voice) u.voice = o.voice; u.rate = o.rate || 1;
+      u.onend = function(){ if(mine!==token) return; i++; next(); };
+      u.onerror = function(e){
+        if(mine!==token) return;
+        var err = e && e.error;
+        if(err==="interrupted" || err==="canceled") return; /* deliberate cancel */
+        curState="idle"; active=null; p.render("idle","Playback error: "+(err||"unknown")+".", true);
+      };
+      try{ synth.speak(u); }catch(e){}
+    })();
+  }
+
+  function toggle(p){
+    if(active===p && curState==="playing"){ try{synth.pause();}catch(e){} curState="paused"; p.render("paused"); }
+    else if(active===p && curState==="paused"){ try{synth.resume();}catch(e){} curState="playing"; p.render("playing"); }
+    else { start(p); }
+  }
+  function stop(p){ if(active===p) stopAll(); else p.render("idle"); }
+
+  /* ---------- voices ---------- */
+  function langName(code){
+    try{ var dn=new Intl.DisplayNames([navigator.language||"en"],{type:"language"}); var n=dn.of(code); if(n && n!==code) return n; }catch(e){}
+    return code;
+  }
+  function rebuildVoiceIndex(){ voicesByName={}; synth.getVoices().forEach(function(v){ voicesByName[v.name]=v; }); }
+
+  function fillPicker(sel, filter){
+    var all = synth.getVoices();
+    var list = (filter==="auto") ? all : all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
+    var keep = sel.value;
+    sel.innerHTML = "";
+    if(!list.length){
+      var o=document.createElement("option"); o.value=""; o.textContent = (filter==="auto"?"No voices found":"No "+filter.toUpperCase()+" voice on this device");
+      sel.appendChild(o); sel.disabled=true; return false;
     }
-    u.onstart=function(){ setStatus(key,"Playing on your device ..."); };
-    u.onend=function(){ setStatus(key,"Finished."); };
-    u.onerror=function(e){ setStatus(key,"Playback error: "+(e.error||"unknown")+".",true); };
-    synth.speak(u);
+    sel.disabled=false;
+    list.sort(function(a,b){ return (a.lang+a.name).localeCompare(b.lang+b.name); });
+    list.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=v.name+" ("+v.lang+")"; sel.appendChild(o); });
+    if(keep && voicesByName[keep] && Array.prototype.some.call(sel.options,function(op){return op.value===keep;})) sel.value=keep;
+    return true;
   }
-  document.addEventListener("click", function(e){
-    var btn = e.target.closest("[data-action]"); if(!btn) return;
-    var a = btn.getAttribute("data-action");
-    if(a==="speak") speak(btn); else if(a==="stop" && supported) synth.cancel();
-  });
+
+  function fillLangPicker(sel){
+    var all = synth.getVoices();
+    var langs = {}; all.forEach(function(v){ if(v.lang){ langs[v.lang]=(langs[v.lang]||0)+1; } });
+    var codes = Object.keys(langs).sort(function(a,b){ return langName(a).localeCompare(langName(b)); });
+    var keep = sel.value; sel.innerHTML="";
+    codes.forEach(function(c){ var o=document.createElement("option"); o.value=c; o.textContent=langName(c)+" ("+c+") · "+langs[c]+" voice"+(langs[c]>1?"s":""); sel.appendChild(o); });
+    if(keep && langs[keep]) sel.value=keep;
+    else{
+      var nav=(navigator.language||"en-US");
+      if(langs[nav]) sel.value=nav;
+      else { var base=nav.split("-")[0]; var m=codes.filter(function(c){return c.toLowerCase().indexOf(base.toLowerCase())===0;})[0]; if(m) sel.value=m; else if(codes.indexOf("en-US")>=0) sel.value="en-US"; }
+    }
+    return codes.length;
+  }
+
+  /* ---------- wire players ---------- */
+  function makePlayer(panel){
+    var primary = panel.querySelector('[data-act="toggle"]');
+    var restart = panel.querySelector('[data-act="restart"]');
+    var stopb   = panel.querySelector('[data-act="stop"]');
+    var status  = panel.querySelector('[data-status]');
+    var picker  = panel.querySelector('.voicePicker');
+    var langSel = panel.querySelector('.langPicker');
+    var rate    = panel.querySelector('.rate');
+    var textarea= panel.querySelector('textarea');
+    var textid  = panel.getAttribute('data-textid');
+    var mode    = panel.getAttribute('data-lang'); /* en | ur | auto */
+    var label   = panel.getAttribute('data-label') || 'Play';
+
+    var p = {
+      getText: function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:''; },
+      getOpts: function(){
+        var l = mode==="auto" ? (langSel&&langSel.value||"en-US") : (mode==="ur"?"ur-PK":"en-US");
+        var v=null; if(picker&&picker.value){ v=voicesByName[picker.value]||null; if(v) l=v.lang; }
+        return { lang:l, voice:v, rate: rate?(parseFloat(rate.value)||1):1 };
+      },
+      render: function(st,msg,err){
+        panel.setAttribute("data-state", st);
+        if(st==="idle"){ primary.innerHTML="&#9654; "+label; if(restart)restart.hidden=true; if(stopb)stopb.hidden=true; }
+        else if(st==="playing"){ primary.innerHTML="&#9208; Pause"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
+        else if(st==="paused"){ primary.innerHTML="&#9654; Resume"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
+        if(status){ status.textContent = (msg!==undefined)?msg:(st==="playing"?"Playing on your device ...":(st==="paused"?"Paused.":"")); status.classList.toggle("err",!!err); }
+      }
+    };
+    if(primary) primary.addEventListener("click", function(){ toggle(p); });
+    if(restart) restart.addEventListener("click", function(){ start(p); });
+    if(stopb)   stopb.addEventListener("click", function(){ stop(p); });
+    p.render("idle");
+    return p;
+  }
+
+  var players = [];
+  function populateAll(){
+    rebuildVoiceIndex();
+    document.querySelectorAll('.langPicker').forEach(function(s){ fillLangPicker(s); });
+    document.querySelectorAll('.voicePicker').forEach(function(s){
+      var f = s.getAttribute('data-langfilter');
+      if(f==="auto"){ var lp=s.closest('.splayer').querySelector('.langPicker'); fillPicker(s, lp?lp.value:"auto"); }
+      else fillPicker(s, f);
+    });
+    var summary=document.getElementById('detectSummary');
+    if(summary){
+      var all=synth.getVoices(); var langs={}; all.forEach(function(v){langs[v.lang]=1;});
+      var n=all.length, m=Object.keys(langs).length;
+      summary.textContent = n ? ("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below.")
+                              : "No speech voices were detected in this browser.";
+    }
+  }
+
   if(!supported){
-    document.querySelectorAll('.status').forEach(function(el){ el.textContent="This browser does not support the Web Speech API."; el.classList.add("err"); });
-    document.querySelectorAll('button.play:not(.stop)').forEach(function(b){ b.disabled=true; });
+    document.querySelectorAll('.status').forEach(function(el){ el.textContent="This browser does not support the Web Speech API, so the free browser route is unavailable here."; el.classList.add("err"); });
+    document.querySelectorAll('button.primary').forEach(function(b){ b.disabled=true; });
+    var ds=document.getElementById('detectSummary'); if(ds) ds.textContent="This browser does not support on-device speech (Web Speech API).";
   } else {
-    populate();
-    if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=populate; }
-    setTimeout(populate,250);
+    document.querySelectorAll('.splayer').forEach(function(panel){ players.push(makePlayer(panel)); });
+    /* re-filter the auto voice picker when the language changes */
+    document.querySelectorAll('.langPicker').forEach(function(lp){
+      lp.addEventListener('change', function(){
+        var vp = lp.closest('.splayer').querySelector('.voicePicker[data-langfilter="auto"]');
+        if(vp) fillPicker(vp, lp.value);
+      });
+    });
+    populateAll();
+    if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged = populateAll; }
+    setTimeout(populateAll, 300);
+    /* Urdu no-voice honest message */
+    setTimeout(function(){
+      document.querySelectorAll('.voicePicker[data-langfilter="ur"]').forEach(function(s){
+        if(s.disabled){ var st=s.closest('.splayer').querySelector('[data-status]'); if(st){ st.textContent="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows."; st.classList.add("err"); } }
+      });
+    }, 500);
   }
+
+  /* ---------- commercial voice choosers ---------- */
+  document.querySelectorAll('.voiceSelect').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var audio=document.getElementById(sel.getAttribute('data-target'));
+      if(!audio) return;
+      var playing = !audio.paused && !audio.ended;
+      audio.src = 'audio/'+sel.getAttribute('data-prefix')+'-'+sel.value+'.mp3';
+      audio.load(); if(playing){ audio.play().catch(function(){}); }
+    });
+  });
+
+  /* stop speech when a clip plays, and only one clip at a time */
+  document.querySelectorAll('audio').forEach(function(a){
+    a.addEventListener('play', function(){
+      if(supported) stopAll();
+      document.querySelectorAll('audio').forEach(function(b){ if(b!==a) b.pause(); });
+    });
+  });
 })();
 </script>
 </body>
