@@ -16,9 +16,7 @@
   *{box-sizing:border-box}
   [hidden]{display:none!important}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.65;font-size:16px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;font-size:16px}
   a{color:var(--wp);text-decoration:none}
   a:hover{text-decoration:underline}
   img{max-width:100%}
@@ -48,52 +46,52 @@
   .lesson-body p{margin:12px 0}
   .textonly-flag{display:inline-block;font-size:.72rem;font-weight:700;color:#5c4a00;background:#fcf3cd;border:1px solid #e6c200;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:.03em}
 
-  /* read-aloud player (browser voice) */
+  /* read-aloud player */
   .listen{border:1px solid #c9d4ff;background:#f3f6ff;border-radius:10px;padding:16px 18px;margin:20px 0}
-  .listen .lead{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;margin-bottom:2px}
-  .listen .lead .spk{font-size:1.3rem}
+  .listen .lead{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;font-weight:700;font-size:1.05rem;margin-bottom:4px}
+  .listen .lead .spk{font-size:1.25rem;line-height:1}
   .listen .hint{font-size:.82rem;color:var(--muted);margin:0 0 12px}
-  .free{display:inline-block;font-size:.68rem;font-weight:700;color:var(--free);background:#e6f4ea;border:1px solid #79c497;border-radius:999px;padding:1px 8px;margin-left:6px;text-transform:uppercase;letter-spacing:.04em;vertical-align:middle}
+  .free{display:inline-flex;align-items:center;font-size:.66rem;font-weight:700;color:var(--free);background:#e6f4ea;border:1px solid #9cd2b2;border-radius:999px;padding:3px 10px;white-space:nowrap;text-transform:uppercase;letter-spacing:.03em;line-height:1}
   .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  button.btn{border-radius:4px;padding:9px 16px;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:1px solid transparent}
+  button.btn,a.btn{border-radius:4px;padding:9px 16px;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;text-decoration:none}
   button.primary{background:var(--wp);color:#fff;border-color:var(--wp-dark);min-width:150px;justify-content:center}
   button.primary:hover{background:var(--wp-dark)}
   button.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
   button.ghost:hover{background:#f0f0f1}
   button.danger{background:#fff;color:var(--warn);border-color:var(--warn)}
   button.danger:hover{background:#fcebec}
+  .btn.next{background:var(--free);color:#fff;border-color:#00593a}
+  .btn.next:hover{background:#00593a;text-decoration:none}
   button.btn:disabled{opacity:.5;cursor:not-allowed}
+
   select,input[type=range],textarea{font-size:.88rem;font-family:inherit}
   select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding:6px 32px 6px 10px;border:1px solid var(--line);border-radius:6px;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath fill='%2350575e' d='M0 0h12L6 7z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-size:11px;color:var(--ink);cursor:pointer;max-width:100%}
-  .voicePicker,.langPicker{width:210px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .voicePicker,.langPicker{width:200px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   select:focus{outline:2px solid var(--wp);outline-offset:1px;border-color:var(--wp)}
   input[type=range]{max-width:100%;accent-color:var(--wp)}
   label.ctl{font-size:.82rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;max-width:100%}
-  .status{font-size:.83rem;color:var(--muted);margin:10px 0 0;min-height:1.2em;display:flex;align-items:center;gap:8px}
-  .status.err{color:var(--warn);font-weight:600}
-  .splayer[data-state="playing"] .status::before,
-  .splayer[data-state="paused"] .status::before{content:"";width:9px;height:9px;border-radius:50%;flex:0 0 auto}
-  .splayer[data-state="playing"] .status::before{background:var(--free);animation:pulse 1s infinite}
-  .splayer[data-state="paused"] .status::before{background:var(--commercial)}
-  @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
   .row2{display:flex;gap:12px 16px;align-items:center;flex-wrap:wrap;margin-top:10px}
   .row2.sliders{flex-wrap:nowrap;gap:16px}
   .row2.sliders label.ctl{flex:1 1 0;min-width:0}
   .row2.sliders input[type=range]{flex:1 1 0;min-width:0;width:auto}
+  .status{font-size:.83rem;color:var(--muted);margin:10px 0 0;min-height:1.2em;display:flex;align-items:center;gap:8px}
+  .status.err{color:var(--warn);font-weight:600}
+  .splayer[data-state="playing"] .status::before,.splayer[data-state="paused"] .status::before{content:"";width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .splayer[data-state="playing"] .status::before{background:var(--free);animation:pulse 1s infinite}
+  .splayer[data-state="paused"] .status::before{background:var(--commercial)}
+  @keyframes pulse{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
 
   .video-wrap{position:relative;padding-top:56.25%;margin:20px 0;border-radius:10px;overflow:hidden;background:#000}
   .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
-  /* explainer */
   .explain{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:26px 0}
   .explain h2{margin-top:0;font-size:1.5rem}
   .explain h3{font-size:1.05rem;margin:18px 0 4px}
   .explain p{margin:6px 0}
   .explain ul{margin:6px 0;padding-left:20px}
   .detect{background:#f3f6ff;border:1px solid #c9d4ff;border-radius:8px;padding:8px 12px;font-size:.85rem;color:#2145c9;margin:12px 0}
-  textarea.trytext{width:100%;min-height:74px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;line-height:1.6;resize:vertical}
+  textarea.trytext{width:100%;min-height:74px;margin-top:14px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;line-height:1.6;resize:vertical}
 
-  /* PoC section */
   .poc{background:var(--soft);border-top:1px solid var(--line);margin-top:44px;padding:8px 0 50px}
   .poc-inner{max-width:820px;margin:0 auto;padding:0 20px}
   .poc h2{font-size:1.6rem;margin:30px 0 6px}
@@ -106,7 +104,7 @@
   .rowc.commercial{border-left-color:var(--commercial)}
   .rowc.ref{border-left-color:var(--ref)}
   .rowc h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1.02rem}
-  .tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:4px}
+  .tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:4px;white-space:nowrap}
   .tag.free{background:#e6f4ea;color:var(--free)}
   .tag.commercial{background:#fbf0da;color:var(--commercial)}
   .tag.ref{background:#e9edff;color:var(--ref)}
@@ -114,9 +112,9 @@
   audio{width:100%;margin-top:8px}
   .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;border:1px solid var(--line);border-radius:6px}
   table{border-collapse:collapse;width:100%;min-width:540px;font-size:.88rem;background:#fff}
-  .table-wrap th,.table-wrap td{border-left:0;border-right:0}
   th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
   th{background:#f0f0f1;font-weight:600}
+  .table-wrap th,.table-wrap td{border-left:0;border-right:0}
   code{background:#f0f0f1;padding:1px 5px;border-radius:3px;font-size:.88em}
   .rec{background:#eef6f0;border:1px solid #a7d3b6;border-radius:8px;padding:16px 18px;margin-top:14px}
   .disclaimer{background:#fcf3cd;border:1px solid #e6c200;border-radius:8px;padding:16px 18px;margin-top:14px}
@@ -160,13 +158,14 @@
   <h1 class="lesson-title">Intro to Block Patterns</h1>
   <div class="lesson-meta"><span class="who">Erica Varlese</span><span>14 minutes</span><span>Level: Intermediate</span></div>
 
-  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" aria-label="Listen to this lesson">
-    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; plays on your device</span></div>
-    <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. It shows Play, Pause, Resume, Restart and Stop, so you always know what state it is in.</p>
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" data-next="scroll:#lesson2sec" aria-label="Listen to this lesson">
+    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
+    <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. Play, Pause, Resume, Restart and Stop, and the timer shows how far along you are.</p>
     <div class="controls">
       <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
       <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
+      <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
     <div class="row2">
       <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
@@ -189,19 +188,20 @@
   <hr style="border:0;border-top:1px solid var(--line);margin:44px 0">
 
   <!-- LESSON 2: text only, no video -->
-  <p class="eyebrow">Lesson &middot; <span class="textonly-flag">text based, no video</span></p>
+  <p class="eyebrow" id="lesson2sec">Lesson &middot; <span class="textonly-flag">text based, no video</span></p>
   <h1 class="lesson-title">Introduction to WordPress</h1>
   <div class="lesson-meta"><span class="who">Beginner WordPress User</span><span>Module 1 of 7</span><span>Level: Beginner</span></div>
 
   <p style="color:var(--muted);font-size:.92rem;margin:14px 0 0">Many Learn lessons are written text with no video lecture. Read-aloud matters most here, because there is no narration at all today. The same free button works on plain lesson text.</p>
 
-  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" aria-label="Listen to this text lesson">
-    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; plays on your device</span></div>
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" data-next="href:https://learn.wordpress.org/lesson/wordpress-essentials-domains-and-hosting/" aria-label="Listen to this text lesson">
+    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
     <p class="hint">A text-only lesson read aloud by the browser. No video was ever recorded for it.</p>
     <div class="controls">
       <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
       <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
+      <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
     <div class="row2">
       <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
@@ -222,26 +222,21 @@
   <!-- ABOUT THE BROWSER VOICE + UNIVERSAL TESTER -->
   <div class="explain">
     <h2>About the "browser voice" (the free, native option)</h2>
-    <p>The free option above does not use any online service. It uses the <strong>Web Speech API</strong>, a text-to-speech engine built into every modern browser (Chrome, Edge, Safari, Firefox). When you press play, the browser reads the text using the voices that are already installed on your own computer or phone.</p>
-
+    <p>The free option above does not use any online service. It uses the <strong>Web Speech API</strong>, a text-to-speech engine built into every modern browser (Chrome, Edge, Safari, Firefox). When you press play, the browser reads the text using the voices already installed on your own computer or phone.</p>
     <h3>Why it suits WordPress.org</h3>
     <ul>
       <li><strong>Free.</strong> No account, no per-word billing.</li>
       <li><strong>Private.</strong> The text never leaves your device. Nothing is sent to any server.</li>
       <li><strong>No dependency.</strong> It ships as a small plugin, with no third-party service to pay for or review.</li>
     </ul>
-
     <h3>What to keep in mind</h3>
     <ul>
       <li>Voice quality depends on the device and operating system, so two people may hear different voices.</li>
       <li>Coverage for non-English languages is uneven, and for some (like Urdu) most devices have no voice at all. The Urdu test further down shows this honestly.</li>
     </ul>
-
     <h3>Try it with your own device, in any language you have</h3>
     <p>This page reads the list of voices installed in <em>your</em> browser, so you can test it in whatever languages your device supports. Pick a language, pick a voice, edit the text if you like, and press play.</p>
-
     <div class="detect" id="detectSummary">Checking which voices are installed in your browser ...</div>
-
     <section class="splayer" data-state="idle" data-lang="auto" aria-label="Try the browser voice">
       <div class="row2">
         <label class="ctl">Language <select class="langPicker"></select></label>
@@ -272,7 +267,7 @@
     <div class="passage"><p class="en" id="enPassage">If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p></div>
 
     <div class="rowc free splayer" data-state="idle" data-lang="en" data-textid="enPassage" data-label="Play browser voice">
-      <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
+      <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
       <p class="note">Web Speech API. No service, no account, no cost. Uses the voices already on this device.</p>
       <div class="controls">
         <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
@@ -307,7 +302,7 @@
     <div class="passage"><p class="ur" id="urPassage" lang="ur" dir="rtl">سلام، اور WordPress کے اس تعارفی سبق میں خوش آمدید۔ اس سبق میں ہم بنیادی باتوں کا جائزہ لیں گے تاکہ آپ سمجھ سکیں کہ WordPress سے کیا کچھ حاصل کیا جا سکتا ہے، چاہے آپ بالکل نئے ہی کیوں نہ ہوں۔</p></div>
 
     <div class="rowc free splayer" data-state="idle" data-lang="ur" data-textid="urPassage" data-label="Play browser voice">
-      <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
+      <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
       <div class="controls">
         <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
         <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
@@ -336,7 +331,7 @@
     <table>
       <thead><tr><th>Sample</th><th>Route</th><th>Service / voices</th><th>Settings</th><th>Cost</th></tr></thead>
       <tbody>
-        <tr><td>Browser voice</td><td>Web Speech API</td><td>Whatever is installed on the device</td><td>Default pitch; adjustable speed</td><td>Free</td></tr>
+        <tr><td>Browser voice</td><td>Web Speech API</td><td>Whatever is installed on the device</td><td>Default pitch; adjustable speed and volume</td><td>Free</td></tr>
         <tr><td>English, commercial</td><td>ElevenLabs, static files</td><td>Bella, Sarah (female); Eric, George (male)</td><td>eleven_multilingual_v2; stability 0.5, similarity 0.75; MP3 128 kbps</td><td>Free tier</td></tr>
         <tr><td>English, reference</td><td>From the lesson video</td><td>Erica Varlese (Intro to Block Patterns)</td><td>0:33.8 to 0:44.3, unedited, mono MP3</td><td>n/a</td></tr>
         <tr><td>Urdu, commercial</td><td>ElevenLabs, static files</td><td>Bella, Sarah (female); Eric, George (male)</td><td>eleven_v3; MP3 128 kbps</td><td>Free tier</td></tr>
@@ -376,60 +371,53 @@
   var supported = !!synth && typeof window.SpeechSynthesisUtterance === "function";
   var voicesByName = {};
 
-  /* ---------- speech controller (one at a time, real state machine) ---------- */
-  var token = 0, active = null, curState = "idle";
+  var token=0, active=null, curState="idle";
+  var chunks=[], curIdx=0;
   var tickInt=null, tStart=0, tAcc=0, tEst=0;
-  function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60), x=s%60; return m+":"+(x<10?"0":"")+x; }
-  function estSeconds(text, rate){ var w=(text||"").trim().split(/\s+/).filter(Boolean).length; return w/(2.8*(rate||1)); }
-  function stopTicker(){ if(tickInt){ clearInterval(tickInt); tickInt=null; } }
+
+  function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60),x=s%60; return m+":"+(x<10?"0":"")+x; }
+  function estSeconds(text,rate){ var w=(text||"").trim().split(/\s+/).filter(Boolean).length; return w/(2.8*(rate||1)); }
+  function stopTicker(){ if(tickInt){clearInterval(tickInt);tickInt=null;} }
   function startTicker(p){ stopTicker(); function upd(){ var el=tAcc+(Date.now()-tStart)/1000; p.setStatus(fmt(el)+" / ~"+fmt(tEst)); } upd(); tickInt=setInterval(upd,250); }
 
   function chunkText(t){
-    t = (t||"").replace(/\s+/g," ").trim();
-    if(!t) return [];
-    var sentences = t.match(/[^.!?؟۔]+[.!?؟۔]*/g) || [t];
-    var out = [];
-    sentences.forEach(function(s){
-      s = s.trim(); if(!s) return;
-      while(s.length > 200){
-        var cut = s.lastIndexOf(" ", 200); if(cut < 80) cut = 200;
-        out.push(s.slice(0, cut).trim()); s = s.slice(cut).trim();
-      }
+    t=(t||"").replace(/\s+/g," ").trim(); if(!t) return [];
+    var parts = t.match(/[^.!?؟۔]+[.!?؟۔]*/g) || [t];
+    var out=[];
+    parts.forEach(function(s){ s=s.trim(); if(!s) return;
+      while(s.length>200){ var cut=s.lastIndexOf(" ",200); if(cut<80)cut=200; out.push(s.slice(0,cut).trim()); s=s.slice(cut).trim(); }
       if(s) out.push(s);
     });
-    return out.length ? out : [t];
+    return out.length?out:[t];
   }
 
   function stopAll(){
-    token++; curState = "idle"; stopTicker(); tAcc=0;
-    var prev = active; active = null;
-    if(supported){ try{ synth.cancel(); }catch(e){} }
-    if(prev) prev.render("idle","");
+    token++; curState="idle"; stopTicker(); tAcc=0; curIdx=0;
+    var prev=active; active=null;
+    if(supported){ try{synth.cancel();}catch(e){} }
+    if(prev){ prev.render("idle",""); prev.hideNext(); }
+  }
+
+  function speakLoop(p){
+    var mine=token;
+    (function next(){
+      if(mine!==token) return;
+      if(curIdx>=chunks.length){ stopTicker(); curState="idle"; active=null; p.render("idle","Finished · "+fmt(tEst)); p.showNext(); return; }
+      var u=new SpeechSynthesisUtterance(chunks[curIdx]);
+      var o=p.getOpts(); u.lang=o.lang; if(o.voice)u.voice=o.voice; u.rate=o.rate||1; u.volume=(typeof o.volume==="number"&&!isNaN(o.volume))?o.volume:1;
+      u.onend=function(){ if(mine!==token)return; curIdx++; next(); };
+      u.onerror=function(e){ if(mine!==token)return; var err=e&&e.error; if(err==="interrupted"||err==="canceled")return; stopTicker(); curState="idle"; active=null; p.render("idle","Playback error: "+(err||"unknown")+".",true); };
+      try{ synth.speak(u); }catch(e){}
+    })();
   }
 
   function start(p){
     stopAll();
-    var mine = ++token;
-    var chunks = chunkText(p.getText());
+    chunks=chunkText(p.getText()); curIdx=0;
     if(!chunks.length){ p.render("idle","Nothing to read.",true); return; }
-    active = p; curState = "playing"; p.render("playing");
-    tAcc=0; tStart=Date.now(); tEst=estSeconds(p.getText(), p.getRate?p.getRate():1); startTicker(p);
-    var i = 0;
-    (function next(){
-      if(mine !== token) return;
-      if(i >= chunks.length){ stopTicker(); curState="idle"; active=null; p.render("idle","Finished · "+fmt(tEst)); return; }
-      var u = new SpeechSynthesisUtterance(chunks[i]);
-      var o = p.getOpts();
-      u.lang = o.lang; if(o.voice) u.voice = o.voice; u.rate = o.rate || 1; u.volume = (typeof o.volume==="number" && !isNaN(o.volume)) ? o.volume : 1;
-      u.onend = function(){ if(mine!==token) return; i++; next(); };
-      u.onerror = function(e){
-        if(mine!==token) return;
-        var err = e && e.error;
-        if(err==="interrupted" || err==="canceled") return; /* deliberate cancel */
-        stopTicker(); curState="idle"; active=null; p.render("idle","Playback error: "+(err||"unknown")+".", true);
-      };
-      try{ synth.speak(u); }catch(e){}
-    })();
+    active=p; curState="playing"; p.render("playing"); p.hideNext();
+    tEst=estSeconds(p.getText(), p.getRate()); tAcc=0; tStart=Date.now(); startTicker(p);
+    token++; speakLoop(p);
   }
 
   function toggle(p){
@@ -437,101 +425,109 @@
     else if(active===p && curState==="paused"){ try{synth.resume();}catch(e){} tStart=Date.now(); curState="playing"; p.render("playing"); startTicker(p); }
     else { start(p); }
   }
-  function stop(p){ if(active===p) stopAll(); else p.render("idle",""); }
+  function stop(p){ if(active===p) stopAll(); else { p.render("idle",""); p.hideNext(); } }
 
-  /* ---------- voices ---------- */
-  function langName(code){
-    try{ var dn=new Intl.DisplayNames([navigator.language||"en"],{type:"language"}); var n=dn.of(code); if(n && n!==code) return n; }catch(e){}
-    return code;
+  /* live change of voice / speed / volume: re-speak the current sentence with new settings */
+  var liveTimer=null;
+  function liveChange(p){
+    if(active!==p) return;
+    tEst=estSeconds(p.getText(), p.getRate());
+    if(curState!=="playing") return; /* when paused/idle the change applies to the next sentence automatically */
+    token++;
+    try{ synth.cancel(); }catch(e){}
+    setTimeout(function(){ if(active===p && curState==="playing") speakLoop(p); }, 45);
   }
+  function liveChangeDebounced(p){ if(liveTimer)clearTimeout(liveTimer); liveTimer=setTimeout(function(){ liveChange(p); },140); }
+
+  /* voices */
+  function langName(code){ try{ var dn=new Intl.DisplayNames([navigator.language||"en"],{type:"language"}); var n=dn.of(code.split("-")[0]); if(n && n.toLowerCase()!==code.split("-")[0].toLowerCase()) return n; }catch(e){} return code; }
+  function shortVoiceLabel(v){ var n=v.name; n=n.replace(/\s*[-–—].*$/,""); n=n.replace(/\s*\([^)]*\)\s*/g," "); n=n.replace(/\s+/g," ").trim(); if(!n) n=v.name; return n+" · "+v.lang; }
   function rebuildVoiceIndex(){ voicesByName={}; synth.getVoices().forEach(function(v){ voicesByName[v.name]=v; }); }
 
   function fillPicker(sel, filter){
-    var all = synth.getVoices();
-    var list = (filter==="auto") ? all : all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
-    var keep = sel.value;
-    sel.innerHTML = "";
-    if(!list.length){
-      var o=document.createElement("option"); o.value=""; o.textContent = (filter==="auto"?"No voices found":"No "+filter.toUpperCase()+" voice on this device");
-      sel.appendChild(o); sel.disabled=true; return false;
-    }
+    var all=synth.getVoices();
+    var list=(filter==="auto")?all:all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
+    var keep=sel.value; sel.innerHTML="";
+    if(!list.length){ var o=document.createElement("option"); o.value=""; o.textContent=(filter==="auto"?"No voices found":"No "+filter.toUpperCase()+" voice on this device"); sel.appendChild(o); sel.disabled=true; return false; }
     sel.disabled=false;
     list.sort(function(a,b){ return (a.lang+a.name).localeCompare(b.lang+b.name); });
-    list.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=v.name+" ("+v.lang+")"; sel.appendChild(o); });
+    list.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=shortVoiceLabel(v); sel.appendChild(o); });
     if(keep && voicesByName[keep] && Array.prototype.some.call(sel.options,function(op){return op.value===keep;})) sel.value=keep;
     return true;
   }
 
   function fillLangPicker(sel){
-    var all = synth.getVoices();
-    var langs = {}; all.forEach(function(v){ if(v.lang){ langs[v.lang]=(langs[v.lang]||0)+1; } });
-    var codes = Object.keys(langs).sort(function(a,b){ return langName(a).localeCompare(langName(b)); });
-    var keep = sel.value; sel.innerHTML="";
-    codes.forEach(function(c){ var o=document.createElement("option"); o.value=c; o.textContent=langName(c)+" ("+c+") · "+langs[c]+" voice"+(langs[c]>1?"s":""); sel.appendChild(o); });
+    var all=synth.getVoices(); var langs={}; all.forEach(function(v){ if(v.lang) langs[v.lang]=(langs[v.lang]||0)+1; });
+    var codes=Object.keys(langs).sort(function(a,b){ return langName(a).localeCompare(langName(b)); });
+    var keep=sel.value; sel.innerHTML="";
+    codes.forEach(function(c){ var o=document.createElement("option"); o.value=c; o.textContent=langName(c)+" ("+c+")"; sel.appendChild(o); });
     if(keep && langs[keep]) sel.value=keep;
-    else{
-      var nav=(navigator.language||"en-US");
-      if(langs[nav]) sel.value=nav;
-      else { var base=nav.split("-")[0]; var m=codes.filter(function(c){return c.toLowerCase().indexOf(base.toLowerCase())===0;})[0]; if(m) sel.value=m; else if(codes.indexOf("en-US")>=0) sel.value="en-US"; }
-    }
+    else{ var nav=(navigator.language||"en-US"); if(langs[nav]) sel.value=nav; else{ var base=nav.split("-")[0]; var m=codes.filter(function(c){return c.toLowerCase().indexOf(base.toLowerCase())===0;})[0]; if(m) sel.value=m; else if(codes.indexOf("en-US")>=0) sel.value="en-US"; } }
     return codes.length;
   }
 
-  /* ---------- wire players ---------- */
   function makePlayer(panel){
-    var primary = panel.querySelector('[data-act="toggle"]');
-    var restart = panel.querySelector('[data-act="restart"]');
-    var stopb   = panel.querySelector('[data-act="stop"]');
-    var status  = panel.querySelector('[data-status]');
-    var picker  = panel.querySelector('.voicePicker');
-    var langSel = panel.querySelector('.langPicker');
-    var rate    = panel.querySelector('.rate');
-    var volEl   = panel.querySelector('.volume');
-    var textarea= panel.querySelector('textarea');
-    var textid  = panel.getAttribute('data-textid');
-    var mode    = panel.getAttribute('data-lang'); /* en | ur | auto */
-    var label   = panel.getAttribute('data-label') || 'Play';
+    var primary=panel.querySelector('[data-act="toggle"]');
+    var restart=panel.querySelector('[data-act="restart"]');
+    var stopb=panel.querySelector('[data-act="stop"]');
+    var nextBtn=panel.querySelector('.nextlesson');
+    var status=panel.querySelector('[data-status]');
+    var picker=panel.querySelector('.voicePicker');
+    var langSel=panel.querySelector('.langPicker');
+    var rate=panel.querySelector('.rate');
+    var volEl=panel.querySelector('.volume');
+    var textarea=panel.querySelector('textarea');
+    var textid=panel.getAttribute('data-textid');
+    var mode=panel.getAttribute('data-lang');
+    var label=panel.getAttribute('data-label')||'Play';
+    var nextSpec=panel.getAttribute('data-next');
 
-    var p = {
-      getText: function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:''; },
-      getOpts: function(){
-        var l = mode==="auto" ? (langSel&&langSel.value||"en-US") : (mode==="ur"?"ur-PK":"en-US");
+    var p={
+      getText:function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:''; },
+      getRate:function(){ return rate?(parseFloat(rate.value)||1):1; },
+      getOpts:function(){
+        var l=mode==="auto"?(langSel&&langSel.value||"en-US"):(mode==="ur"?"ur-PK":"en-US");
         var v=null; if(picker&&picker.value){ v=voicesByName[picker.value]||null; if(v) l=v.lang; }
-        return { lang:l, voice:v, rate: rate?(parseFloat(rate.value)||1):1, volume: volEl?(parseFloat(volEl.value)):1 };
+        return { lang:l, voice:v, rate:this.getRate(), volume: volEl?(parseFloat(volEl.value)):1 };
       },
-      render: function(st,msg,err){
-        panel.setAttribute("data-state", st);
+      render:function(st,msg,err){
+        panel.setAttribute("data-state",st);
         if(st==="idle"){ primary.innerHTML="&#9654; "+label; if(restart)restart.hidden=true; if(stopb)stopb.hidden=true; }
         else if(st==="playing"){ primary.innerHTML="&#9208; Pause"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
         else if(st==="paused"){ primary.innerHTML="&#9654; Resume"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
-        if(status && msg!==undefined){ status.textContent = msg; status.classList.toggle("err",!!err); }
+        if(status && msg!==undefined){ status.textContent=msg; status.classList.toggle("err",!!err); }
       },
-      setStatus: function(txt){ if(status){ status.textContent = txt; status.classList.remove("err"); } },
-      getRate: function(){ return rate?(parseFloat(rate.value)||1):1; }
+      setStatus:function(txt){ if(status){ status.textContent=txt; status.classList.remove("err"); } },
+      showNext:function(){ if(nextBtn) nextBtn.hidden=false; },
+      hideNext:function(){ if(nextBtn) nextBtn.hidden=true; }
     };
-    if(primary) primary.addEventListener("click", function(){ toggle(p); });
-    if(restart) restart.addEventListener("click", function(){ start(p); });
-    if(stopb)   stopb.addEventListener("click", function(){ stop(p); });
+
+    if(primary) primary.addEventListener("click",function(){ toggle(p); });
+    if(restart) restart.addEventListener("click",function(){ start(p); });
+    if(stopb) stopb.addEventListener("click",function(){ stop(p); });
+    if(nextBtn && nextSpec) nextBtn.addEventListener("click",function(){
+      if(nextSpec.indexOf("scroll:")===0){ var t=document.querySelector(nextSpec.slice(7)); if(t) t.scrollIntoView({behavior:"smooth",block:"start"}); }
+      else if(nextSpec.indexOf("href:")===0){ window.open(nextSpec.slice(5),"_blank","noopener"); }
+    });
+    if(rate) rate.addEventListener("input",function(){ liveChangeDebounced(p); });
+    if(volEl) volEl.addEventListener("input",function(){ liveChangeDebounced(p); });
+    if(picker) picker.addEventListener("change",function(){ liveChange(p); });
+
     p.render("idle");
     return p;
   }
 
-  var players = [];
   function populateAll(){
     rebuildVoiceIndex();
     document.querySelectorAll('.langPicker').forEach(function(s){ fillLangPicker(s); });
     document.querySelectorAll('.voicePicker').forEach(function(s){
-      var f = s.getAttribute('data-langfilter');
+      var f=s.getAttribute('data-langfilter');
       if(f==="auto"){ var lp=s.closest('.splayer').querySelector('.langPicker'); fillPicker(s, lp?lp.value:"auto"); }
-      else fillPicker(s, f);
+      else fillPicker(s,f);
     });
     var summary=document.getElementById('detectSummary');
-    if(summary){
-      var all=synth.getVoices(); var langs={}; all.forEach(function(v){langs[v.lang]=1;});
-      var n=all.length, m=Object.keys(langs).length;
-      summary.textContent = n ? ("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below.")
-                              : "No speech voices were detected in this browser.";
-    }
+    if(summary){ var all=synth.getVoices(); var langs={}; all.forEach(function(v){langs[v.lang]=1;}); var n=all.length,m=Object.keys(langs).length;
+      summary.textContent = n?("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below."):"No speech voices were detected in this browser."; }
   }
 
   if(!supported){
@@ -539,42 +535,31 @@
     document.querySelectorAll('button.primary').forEach(function(b){ b.disabled=true; });
     var ds=document.getElementById('detectSummary'); if(ds) ds.textContent="This browser does not support on-device speech (Web Speech API).";
   } else {
-    document.querySelectorAll('.splayer').forEach(function(panel){ players.push(makePlayer(panel)); });
-    /* re-filter the auto voice picker when the language changes */
+    document.querySelectorAll('.splayer').forEach(function(panel){ makePlayer(panel); });
     document.querySelectorAll('.langPicker').forEach(function(lp){
-      lp.addEventListener('change', function(){
-        var vp = lp.closest('.splayer').querySelector('.voicePicker[data-langfilter="auto"]');
-        if(vp) fillPicker(vp, lp.value);
-      });
+      lp.addEventListener('change',function(){ var vp=lp.closest('.splayer').querySelector('.voicePicker[data-langfilter="auto"]'); if(vp) fillPicker(vp, lp.value); });
     });
     populateAll();
-    if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged = populateAll; }
-    setTimeout(populateAll, 300);
-    /* Urdu no-voice honest message */
+    if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=populateAll; }
+    setTimeout(populateAll,300);
     setTimeout(function(){
       document.querySelectorAll('.voicePicker[data-langfilter="ur"]').forEach(function(s){
         if(s.disabled){ var st=s.closest('.splayer').querySelector('[data-status]'); if(st){ st.textContent="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows."; st.classList.add("err"); } }
       });
-    }, 500);
+    },500);
   }
 
-  /* ---------- commercial voice choosers ---------- */
+  /* commercial voice choosers */
   document.querySelectorAll('.voiceSelect').forEach(function(sel){
-    sel.addEventListener('change', function(){
-      var audio=document.getElementById(sel.getAttribute('data-target'));
-      if(!audio) return;
-      var playing = !audio.paused && !audio.ended;
-      audio.src = 'audio/'+sel.getAttribute('data-prefix')+'-'+sel.value+'.mp3';
+    sel.addEventListener('change',function(){
+      var audio=document.getElementById(sel.getAttribute('data-target')); if(!audio) return;
+      var playing=!audio.paused && !audio.ended;
+      audio.src='audio/'+sel.getAttribute('data-prefix')+'-'+sel.value+'.mp3';
       audio.load(); if(playing){ audio.play().catch(function(){}); }
     });
   });
-
-  /* stop speech when a clip plays, and only one clip at a time */
   document.querySelectorAll('audio').forEach(function(a){
-    a.addEventListener('play', function(){
-      if(supported) stopAll();
-      document.querySelectorAll('audio').forEach(function(b){ if(b!==a) b.pause(); });
-    });
+    a.addEventListener('play',function(){ if(supported) stopAll(); document.querySelectorAll('audio').forEach(function(b){ if(b!==a) b.pause(); }); });
   });
 })();
 </script>
