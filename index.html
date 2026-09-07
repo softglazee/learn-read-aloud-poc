@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read-aloud for lessons: proof of concept (Learn #3649)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wp:#3858e9; --wp-dark:#2145c9; --ink:#1e1e1e; --muted:#50575e; --line:#dcdcde;
+    --bg:#ffffff; --soft:#f6f7f7; --header:#1d2327; --footer:#1d2327;
+    --free:#00733e; --commercial:#8a5a00; --ref:#3858e9; --warn:#b32d2e;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65;font-size:16px}
+  a{color:var(--wp);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{max-width:100%}
+
+  /* proof-of-concept ribbon */
+  .ribbon{background:#fcf3cd;color:#5c4a00;font-size:.82rem;text-align:center;
+    padding:7px 14px;border-bottom:1px solid #e6c200}
+  .ribbon strong{font-weight:700}
+
+  /* global header */
+  header.site{background:var(--header);color:#fff}
+  .site-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;
+    padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap}
+  .brand svg{width:28px;height:28px;fill:#fff}
+  nav.site-nav{display:flex;gap:20px;flex-wrap:wrap;font-size:.92rem}
+  nav.site-nav a{color:#d7d9db}
+  nav.site-nav a:hover{color:#fff;text-decoration:none}
+  .site-spacer{margin-left:auto}
+  .searchbox{background:#2c3338;border:1px solid #3c434a;border-radius:4px;color:#a7aaad;
+    font-size:.85rem;padding:6px 12px;display:flex;align-items:center;gap:8px}
+
+  main{max-width:820px;margin:0 auto;padding:0 20px}
+  .crumbs{font-size:.85rem;color:var(--muted);padding:18px 0 0}
+  .crumbs a{color:var(--muted)}
+
+  .eyebrow{color:var(--wp);font-weight:700;font-size:.78rem;letter-spacing:.08em;
+    text-transform:uppercase;margin:22px 0 6px}
+  h1.lesson-title{font-size:2.1rem;line-height:1.2;margin:0 0 12px}
+  .lesson-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;
+    border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:8px}
+  .lesson-meta .who{font-weight:600;color:var(--ink)}
+
+  /* the proposed feature: Listen bar */
+  .listen{border:1px solid #c9d4ff;background:#f3f6ff;border-radius:10px;padding:16px 18px;margin:20px 0}
+  .listen .lead{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;margin-bottom:2px}
+  .listen .lead .spk{font-size:1.3rem}
+  .listen .hint{font-size:.82rem;color:var(--muted);margin:0 0 12px}
+  .listen .free{display:inline-block;font-size:.68rem;font-weight:700;color:var(--free);
+    background:#e6f4ea;border:1px solid #79c497;border-radius:999px;padding:1px 8px;margin-left:6px;
+    text-transform:uppercase;letter-spacing:.04em;vertical-align:middle}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button.play{background:var(--wp);color:#fff;border:1px solid var(--wp-dark);border-radius:4px;
+    padding:10px 18px;font-size:.95rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+    font-family:inherit}
+  button.play:hover{background:var(--wp-dark)}
+  button.play:disabled{background:#c3c4c7;border-color:#c3c4c7;cursor:not-allowed}
+  button.stop{background:#fff;color:var(--warn);border:1px solid var(--warn)}
+  button.stop:hover{background:#fcebec}
+  select,input[type=range]{font-size:.88rem;font-family:inherit}
+  select{padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:#fff;max-width:100%}
+  label.ctl{font-size:.82rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+  .status{font-size:.83rem;color:var(--muted);margin:10px 0 0;min-height:1.2em}
+  .status.err{color:var(--warn);font-weight:600}
+
+  /* video */
+  .video-wrap{position:relative;padding-top:56.25%;margin:20px 0;border-radius:10px;overflow:hidden;background:#000}
+  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  .lesson-body h2{font-size:1.4rem;margin:30px 0 8px}
+  .lesson-body p{margin:12px 0}
+
+  /* PoC comparison section */
+  .poc{background:var(--soft);border-top:1px solid var(--line);margin-top:44px;padding:8px 0 50px}
+  .poc-inner{max-width:820px;margin:0 auto;padding:0 20px}
+  .poc h2{font-size:1.6rem;margin:30px 0 6px}
+  .poc .sub{color:var(--muted);margin-top:0}
+  .passage{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:14px 0}
+  .passage .en{font-size:1.05rem}
+  .passage .ur{direction:rtl;text-align:right;font-size:1.4rem;line-height:2.2;
+    font-family:"Noto Nastaliq Urdu",serif}
+  .row{border:1px solid var(--line);border-left-width:5px;border-radius:6px;padding:14px 16px;margin:12px 0;background:#fff}
+  .row.free{border-left-color:var(--free)}
+  .row.commercial{border-left-color:var(--commercial)}
+  .row.ref{border-left-color:var(--ref)}
+  .row h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1.02rem}
+  .tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:4px}
+  .tag.free{background:#e6f4ea;color:var(--free)}
+  .tag.commercial{background:#fbf0da;color:var(--commercial)}
+  .tag.ref{background:#e9edff;color:var(--ref)}
+  .row .note{font-size:.85rem;color:var(--muted);margin:2px 0 8px}
+  audio{width:100%;margin-top:8px}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:8px;background:#fff}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f0f0f1;font-weight:600}
+  code{background:#f0f0f1;padding:1px 5px;border-radius:3px;font-size:.88em}
+  .rec{background:#eef6f0;border:1px solid #a7d3b6;border-radius:8px;padding:16px 18px;margin-top:14px}
+  .disclaimer{background:#fcf3cd;border:1px solid #e6c200;border-radius:8px;padding:16px 18px;margin-top:14px}
+
+  /* footer */
+  footer.site{background:var(--footer);color:#c3c4c7;margin-top:0;padding:34px 20px 40px}
+  .foot-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .foot-inner svg{width:30px;height:30px;fill:#fff}
+  .foot-inner .tag-line{font-style:italic;color:#a7aaad}
+  .foot-inner .foot-links{margin-left:auto;display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem}
+  .foot-inner .foot-links a{color:#c3c4c7}
+  .credit{max-width:1100px;margin:16px auto 0;font-size:.8rem;color:#8c8f94;padding:0 20px}
+
+  @media (max-width:600px){
+    h1.lesson-title{font-size:1.6rem}
+    nav.site-nav{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="ribbon">
+  <strong>Proof of concept</strong> for <a href="https://github.com/WordPress/Learn/issues/3649">Learn WordPress issue #3649</a>,
+  built by <a href="https://profiles.wordpress.org/softglaze/">@softglaze</a>. A demonstration to show read-aloud in context. This is not the live Learn WordPress site.
+</div>
+
+<header class="site">
+  <div class="site-inner">
+    <span class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 7.03c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .923-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/></svg>
+      Learn WordPress
+    </span>
+    <nav class="site-nav">
+      <a href="#">Courses</a>
+      <a href="#">Lessons</a>
+      <a href="#">Tutorials</a>
+      <a href="#">Online Workshops</a>
+    </nav>
+    <span class="site-spacer"></span>
+    <span class="searchbox">Search</span>
+  </div>
+</header>
+
+<main>
+  <div class="crumbs"><a href="#">Learn</a> &rsaquo; <a href="#">Tutorials</a> &rsaquo; Intro to Block Patterns</div>
+
+  <p class="eyebrow">Tutorial</p>
+  <h1 class="lesson-title">Intro to Block Patterns</h1>
+  <div class="lesson-meta">
+    <span class="who">Erica Varlese</span>
+    <span>14 minutes</span>
+    <span>Level: Intermediate</span>
+    <span>Publishing with the Block Editor</span>
+  </div>
+
+  <!-- THE PROPOSED FEATURE -->
+  <section class="listen" aria-label="Listen to this lesson">
+    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; plays on your device</span></div>
+    <p class="hint">This is the feature under discussion: a play button that reads the lesson text aloud using the browser's own voices. Nothing is sent anywhere, and it costs nothing.</p>
+    <div class="controls">
+      <button class="play" data-lang="en" data-textid="lessonBody" data-action="speak">&#9654; Listen to this lesson</button>
+      <button class="play stop" data-action="stop">&#9632; Stop</button>
+      <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
+      <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
+    </div>
+    <p class="status" data-status="en" role="status" aria-live="polite"></p>
+  </section>
+
+  <div class="video-wrap">
+    <iframe title="Intro to Block Patterns (VideoPress)" src="https://video.wordpress.com/embed/g4Q6MkSO?hd=1" allowfullscreen allow="clipboard-write"></iframe>
+  </div>
+
+  <div class="lesson-body" id="lessonBody">
+    <p>If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p>
+    <p>A block pattern is a ready-made arrangement of blocks that you can insert into a post or page in one step, then adjust to your needs. Patterns save you from building common layouts, like a call to action, a gallery, or a pricing table, block by block every time.</p>
+    <p>You add a pattern the same way you add any block, through the inserter, then edit the text and images inside it. Because a pattern is just blocks, everything you already know about moving and styling blocks still applies.</p>
+  </div>
+
+  <p style="font-size:.85rem;color:var(--muted);margin-top:8px">The paragraphs above are the lesson text the Listen button reads. The first one is the exact passage compared below.</p>
+</main>
+
+<!-- PROOF OF CONCEPT COMPARISON -->
+<section class="poc">
+  <div class="poc-inner">
+    <h2>Proof of concept: how should read-aloud sound?</h2>
+    <p class="sub">The section above shows the free, browser-native feature working on a real lesson. This section compares that free voice against a commercial voice and the lesson's own narrator, so the team can decide how far to go. Everything here is for comparison only.</p>
+
+    <h3 style="margin-top:24px">English, the same passage three ways</h3>
+    <div class="passage"><p class="en" id="enPassage">If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p></div>
+
+    <div class="row free">
+      <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
+      <p class="note">Web Speech API. No service, no account, no cost. Uses the voices already on this device.</p>
+      <div class="controls">
+        <button class="play" data-lang="en" data-textid="enPassage" data-action="speak">&#9654; Play browser voice</button>
+        <button class="play stop" data-action="stop">&#9632; Stop</button>
+        <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
+      </div>
+      <p class="status" data-status="en2" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="row commercial">
+      <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
+      <p class="note">Pre-generated with ElevenLabs, voice "Bella", model Eleven Multilingual v2. Settings are in the table below.</p>
+      <audio controls preload="none"><source src="audio/en-commercial.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
+    </div>
+
+    <div class="row ref">
+      <h3>Original video audio <span class="tag ref">Reference</span></h3>
+      <p class="note">The lesson's own narrator, Erica Varlese, at 0:33 to 0:44 of the video above.</p>
+      <audio controls preload="none"><source src="audio/en-video-reference.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
+    </div>
+
+    <h3 style="margin-top:34px">Non-English: Urdu</h3>
+    <p class="sub">This is where the decision bites. Urdu is right-to-left, and most devices ship no Urdu voice at all, so the free browser route below will usually report that it cannot speak it. This is not hypothetical for Learn: the lesson <em>Introduction to WordPress</em> is already translated into Urdu in <a href="https://github.com/WordPress/Learn/issues/3613">Learn #3613</a>. The passage below is that reviewed community translation.</p>
+    <div class="passage"><p class="ur" id="urPassage" lang="ur" dir="rtl">سلام، اور WordPress کے اس تعارفی سبق میں خوش آمدید۔ اس سبق میں ہم بنیادی باتوں کا جائزہ لیں گے تاکہ آپ سمجھ سکیں کہ WordPress سے کیا کچھ حاصل کیا جا سکتا ہے، چاہے آپ بالکل نئے ہی کیوں نہ ہوں۔</p></div>
+
+    <div class="row free">
+      <h3>Browser voice <span class="tag free">Free &middot; on your device</span></h3>
+      <div class="controls">
+        <button class="play" data-lang="ur" data-textid="urPassage" data-action="speak">&#9654; Play browser voice</button>
+        <button class="play stop" data-action="stop">&#9632; Stop</button>
+        <label class="ctl">Voice <select class="voicePicker" data-langfilter="ur"></select></label>
+      </div>
+      <p class="status" data-status="ur" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="row commercial">
+      <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
+      <p class="note">Pre-generated with ElevenLabs, model Eleven v3 (the model that covers Urdu). Voice: Bella.</p>
+      <audio controls preload="none"><source src="audio/ur-commercial.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
+    </div>
+
+    <h2 style="margin-top:38px">How each sample was produced</h2>
+    <p class="sub">Stated so anyone can reproduce or challenge every clip.</p>
+    <table>
+      <thead><tr><th>Sample</th><th>Route</th><th>Service / voice</th><th>Settings</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>English, browser</td><td>Web Speech API</td><td>Device voice (shown in picker)</td><td>Default rate and pitch</td><td>Free</td></tr>
+        <tr><td>English, commercial</td><td>ElevenLabs, static file</td><td>Bella</td><td>eleven_multilingual_v2; stability 0.5, similarity 0.75; MP3 128 kbps</td><td>Free tier</td></tr>
+        <tr><td>English, reference</td><td>From the lesson video</td><td>Erica Varlese (Intro to Block Patterns)</td><td>0:33.8 to 0:44.3, unedited, mono MP3</td><td>n/a</td></tr>
+        <tr><td>Urdu, browser</td><td>Web Speech API</td><td>Device Urdu voice if present, else none</td><td>lang <code>ur-PK</code></td><td>Free</td></tr>
+        <tr><td>Urdu, commercial</td><td>ElevenLabs, static file</td><td>Bella</td><td>eleven_v3; MP3 128 kbps</td><td>Free tier</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:34px">What this suggests</h2>
+    <div class="rec">
+      <ul style="margin:0;padding-left:20px">
+        <li><strong>Default to the free browser-native route.</strong> No cost, no third-party dependency, no data leaves the device, no privacy review. It ships as a small plugin and is the only route that fits WordPress.org infrastructure without a procurement decision.</li>
+        <li><strong>For high-value lessons and for non-English, allow pre-generated static audio files.</strong> Made once, committed like any other asset. Commercial quality, still no live paid API and no billing on wp.org.</li>
+        <li><strong>Keep the live commercial API as a comparison only,</strong> not as the thing we install.</li>
+        <li><strong>Lead with the maintenance case:</strong> read-aloud text can be corrected in minutes, a produced video cannot be corrected without reshooting.</li>
+        <li><strong>Urdu answers the English-only versus all-locales question with evidence:</strong> the browser route cannot speak it on a typical device, so translated content realistically needs the pre-generated-file route.</li>
+      </ul>
+    </div>
+
+    <h2 style="margin-top:34px">What this demo is and is not</h2>
+    <div class="disclaimer">
+      <p style="margin:0">This is a demonstration to make the discussion concrete. It is <strong>not</strong> a proposal to install any service on WordPress.org, which would be a Meta team decision. The commercial clips were produced on a personal free-tier allowance purely to illustrate quality, with the exact service, voice and settings stated above so the comparison is reproducible.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="foot-inner">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 7.03c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .923-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/></svg>
+    <span class="tag-line">Code is Poetry.</span>
+    <span class="foot-links">
+      <a href="https://github.com/WordPress/Learn/issues/3649">Issue #3649</a>
+      <a href="https://github.com/WordPress/Learn/issues/3613">Urdu course #3613</a>
+      <a href="https://profiles.wordpress.org/softglaze/">@softglaze</a>
+    </span>
+  </div>
+  <p class="credit">Proof of concept for Learn WordPress issue #3649. Built by Azhar Ali (@softglaze). Vanilla HTML, CSS and JavaScript, no build step, no dependencies. Not affiliated with or endorsed by the WordPress project; the WordPress logo is used here only to show the feature in context.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var synth = window.speechSynthesis;
+  var supported = !!synth && typeof window.SpeechSynthesisUtterance === "function";
+  var pickers = Array.prototype.slice.call(document.querySelectorAll(".voicePicker"));
+
+  function setStatus(key, msg, isErr){
+    document.querySelectorAll('[data-status="'+key+'"]').forEach(function(el){
+      el.textContent = msg || ""; el.classList.toggle("err", !!isErr);
+    });
+  }
+  function voicesForFilter(f){
+    return synth.getVoices().filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(f.toLowerCase())===0; });
+  }
+  function populate(){
+    pickers.forEach(function(sel){
+      var filter = sel.getAttribute("data-langfilter");
+      var voices = voicesForFilter(filter);
+      sel.innerHTML = "";
+      if(!voices.length){
+        var o=document.createElement("option"); o.textContent="No "+filter.toUpperCase()+" voice on this device"; o.value=""; sel.appendChild(o); sel.disabled=true;
+        if(filter==="ur"){ setStatus("ur","This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows.",true); }
+        return;
+      }
+      sel.disabled=false;
+      voices.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=v.name+"  ("+v.lang+")"; sel.appendChild(o); });
+    });
+  }
+  function statusKeyFor(btn){
+    var row = btn.closest(".listen, .row");
+    var st = row ? row.querySelector("[data-status]") : null;
+    return st ? st.getAttribute("data-status") : (btn.getAttribute("data-lang")||"en");
+  }
+  function speak(btn){
+    if(!supported){ setStatus(statusKeyFor(btn),"This browser does not support the Web Speech API.",true); return; }
+    synth.cancel();
+    var lang = btn.getAttribute("data-lang");
+    var el = document.getElementById(btn.getAttribute("data-textid"));
+    var text = el ? el.textContent.replace(/\s+/g," ").trim() : "";
+    var key = statusKeyFor(btn);
+    if(!text){ setStatus(key,"No text to read.",true); return; }
+    var row = btn.closest(".listen, .row");
+    var picker = row ? row.querySelector(".voicePicker") : null;
+    var rateEl = row ? row.querySelector(".rate") : null;
+    if(picker && picker.disabled){ setStatus(key,"No suitable voice is available on this device for this language.",true); return; }
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = (lang==="ur") ? "ur-PK" : "en-US";
+    if(rateEl){ u.rate = parseFloat(rateEl.value)||1; }
+    if(picker && picker.value){
+      var chosen = synth.getVoices().filter(function(v){ return v.name===picker.value; })[0];
+      if(chosen){ u.voice=chosen; u.lang=chosen.lang; }
+    }
+    u.onstart=function(){ setStatus(key,"Playing on your device ..."); };
+    u.onend=function(){ setStatus(key,"Finished."); };
+    u.onerror=function(e){ setStatus(key,"Playback error: "+(e.error||"unknown")+".",true); };
+    synth.speak(u);
+  }
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-action]"); if(!btn) return;
+    var a = btn.getAttribute("data-action");
+    if(a==="speak") speak(btn); else if(a==="stop" && supported) synth.cancel();
+  });
+  if(!supported){
+    document.querySelectorAll('.status').forEach(function(el){ el.textContent="This browser does not support the Web Speech API."; el.classList.add("err"); });
+    document.querySelectorAll('button.play:not(.stop)').forEach(function(b){ b.disabled=true; });
+  } else {
+    populate();
+    if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=populate; }
+    setTimeout(populate,250);
+  }
+})();
+</script>
+</body>
+</html>
