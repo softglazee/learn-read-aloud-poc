@@ -112,7 +112,9 @@
   .tag.ref{background:#e9edff;color:var(--ref)}
   .rowc .note{font-size:.85rem;color:var(--muted);margin:2px 0 8px}
   audio{width:100%;margin-top:8px}
-  table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:8px;background:#fff}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;border:1px solid var(--line);border-radius:6px}
+  table{border-collapse:collapse;width:100%;min-width:540px;font-size:.88rem;background:#fff}
+  .table-wrap th,.table-wrap td{border-left:0;border-right:0}
   th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
   th{background:#f0f0f1;font-weight:600}
   code{background:#f0f0f1;padding:1px 5px;border-radius:3px;font-size:.88em}
@@ -330,6 +332,7 @@
 
     <h2 style="margin-top:38px">How each sample was produced</h2>
     <p class="sub">Stated so anyone can reproduce or challenge every clip.</p>
+    <div class="table-wrap">
     <table>
       <thead><tr><th>Sample</th><th>Route</th><th>Service / voices</th><th>Settings</th><th>Cost</th></tr></thead>
       <tbody>
@@ -339,6 +342,7 @@
         <tr><td>Urdu, commercial</td><td>ElevenLabs, static files</td><td>Bella, Sarah (female); Eric, George (male)</td><td>eleven_v3; MP3 128 kbps</td><td>Free tier</td></tr>
       </tbody>
     </table>
+    </div>
 
     <h2 style="margin-top:34px">What this suggests</h2>
     <div class="rec">
