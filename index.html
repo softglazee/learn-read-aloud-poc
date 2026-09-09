@@ -127,6 +127,53 @@
   .foot-inner .foot-links a{color:#c3c4c7}
   .credit{max-width:1100px;margin:16px auto 0;font-size:.8rem;color:#8c8f94;padding:0 20px}
 
+  /* --- v2 controls, rebuilt 10 September from the feedback on #3649 --- */
+  .ra-top{display:flex;align-items:flex-start;gap:10px}
+  .ra-head{flex:1 1 auto;min-width:0}
+  .ra-menu-wrap{position:relative;flex:0 0 auto}
+  button.hamb,button.volbtn{background:#fff;border:1px solid var(--line);border-radius:6px;width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;color:var(--ink);flex:0 0 auto}
+  button.hamb:hover,button.volbtn:hover{background:#f0f0f1}
+  button.hamb svg,button.volbtn svg{width:18px;height:18px;fill:currentColor;pointer-events:none}
+  button.hamb[aria-expanded="true"]{background:var(--wp);border-color:var(--wp-dark);color:#fff}
+  button.volbtn[data-muted="true"]{color:var(--warn);border-color:var(--warn);background:#fcebec}
+  button.hamb:focus-visible,button.volbtn:focus-visible,.speeds button:focus-visible{outline:2px solid var(--wp);outline-offset:2px}
+
+  .menu{position:absolute;top:44px;left:0;z-index:30;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:12px 14px;width:310px;max-width:80vw}
+  .menu h4{margin:0 0 8px;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+  .menu .vlist{display:flex;flex-direction:column;gap:2px}
+  .menu .vopt{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:.87rem}
+  .menu .vopt:hover{background:#f3f6ff}
+  .menu .vopt input{margin:0;accent-color:var(--wp);flex:0 0 auto}
+  .menu .vopt .vn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .menu .vopt .qb{margin-left:auto;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 6px;border-radius:3px;flex:0 0 auto}
+  .menu .qb.nat{background:#e6f4ea;color:var(--free)}
+  .menu .qb.onl{background:#e9edff;color:var(--ref)}
+  .menu .more{background:none;border:0;color:var(--wp);font:inherit;font-size:.82rem;cursor:pointer;padding:6px 2px 2px;text-align:left}
+  .menu .more:hover{text-decoration:underline}
+  .menu .mrow{display:flex;align-items:center;gap:9px;border-top:1px solid var(--line);margin-top:9px;padding-top:10px;font-size:.82rem;color:var(--muted)}
+  .menu .mrow input[type=range]{flex:1 1 auto;min-width:0}
+  .menu .none{font-size:.85rem;color:var(--warn);font-weight:600;margin:0}
+
+  .seekwrap{display:flex;align-items:center;gap:10px;margin-top:13px}
+  .seekwrap .t{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;flex:0 0 auto;min-width:36px}
+  .seekwrap .t.right{text-align:right}
+  input[type=range].seek{flex:1 1 auto;min-width:0;margin:0;height:22px;cursor:pointer}
+  .splayer[data-state="idle"] .seekwrap{opacity:.6}
+
+  .ctlrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:11px}
+  .ctlrow .lbl{font-size:.78rem;color:var(--muted)}
+  .speeds{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff}
+  .speeds button{border:0;border-left:1px solid var(--line);background:#fff;font:inherit;font-size:.82rem;font-weight:600;color:var(--muted);padding:8px 11px;cursor:pointer;min-width:46px}
+  .speeds button:first-child{border-left:0}
+  .speeds button:hover{background:#f0f0f1}
+  .speeds button[aria-pressed="true"]{background:var(--wp);color:#fff}
+
+  .whatsnew{background:#e6f4ea;border:1px solid #9cd2b2;border-radius:8px;padding:15px 18px;margin:20px 0 4px}
+  .whatsnew h3{margin:0 0 6px;font-size:1rem;color:#00593a}
+  .whatsnew ul{margin:6px 0 0;padding-left:20px;font-size:.9rem}
+  .whatsnew li{margin:4px 0}
+  .sentence-note{background:#f6f7f7;border:1px solid var(--line);border-left:4px solid var(--wp);border-radius:6px;padding:12px 15px;margin:14px 0;font-size:.88rem}
+  .sentence-note p{margin:5px 0}
   @media (max-width:600px){ h1.lesson-title{font-size:1.6rem} nav.site-nav{display:none} button.primary{min-width:0} }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} .splayer .status::before{animation:none!important} }
 </style>
@@ -153,26 +200,65 @@
 <main>
   <div class="crumbs"><a href="#">Learn</a> &rsaquo; <a href="#">Tutorials</a> &rsaquo; Intro to Block Patterns</div>
 
+  <div class="whatsnew">
+    <h3>Updated 10 September, from the feedback on the issue</h3>
+    <ul>
+      <li><strong>Speed is a set of presets now</strong> (0.5&times;, 1&times;, 1.5&times;, 2&times;) rather than a slider.</li>
+      <li><strong>Volume is a button</strong> that mutes and unmutes. The fine volume slider moved into the settings menu, so the main row stays simple.</li>
+      <li><strong>A position slider was added</strong>, so a listener can rewind or skip forward. It moves in sentence steps rather than seconds, which is a real limit of the browser engine rather than a shortcut: see <a href="#seeknote">why the slider moves in sentences</a>.</li>
+      <li><strong>Voice selection moved into the hamburger menu at the top left</strong> of each player, and it lists <strong>the best four voices your own device has</strong>, ranked automatically rather than listed alphabetically.</li>
+      <li><strong>An answer on the robotic voice</strong> is at the end of the page: <a href="#lessrobotic">how to make it sound less robotic</a>. Short version, choosing the voice instead of accepting the browser default is most of the fix, and it is free.</li>
+    </ul>
+  </div>
+
   <!-- LESSON 1: has a video -->
   <p class="eyebrow">Tutorial &middot; has video</p>
   <h1 class="lesson-title">Intro to Block Patterns</h1>
   <div class="lesson-meta"><span class="who">Erica Varlese</span><span>14 minutes</span><span>Level: Intermediate</span></div>
 
-  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" data-next="scroll:#lesson2sec" aria-label="Listen to this lesson">
-    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
-    <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. Play, Pause, Resume, Restart and Stop, and the timer shows how far along you are.</p>
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" data-next="scroll:#lesson2sec" data-rate="1" data-vol="1" data-muted="false" aria-label="Listen to this lesson">
+    <div class="ra-top">
+      <div class="ra-menu-wrap">
+        <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Voice and volume settings" title="Voice and volume settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+        </button>
+        <div class="menu" data-menu hidden>
+          <h4>Voice</h4>
+          <div class="vlist" data-vlist></div>
+          <button class="more" type="button" data-act="more" hidden>Show all voices</button>
+          <div class="mrow">
+            <span>Volume</span>
+            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+          </div>
+        </div>
+      </div>
+      <div class="ra-head">
+        <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
+        <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. Speed presets, a mute button, and a position slider so you can rewind or skip ahead. Voice choice is in the menu at the top left.</p>
+      </div>
+    </div>
     <div class="controls">
       <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
       <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
       <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
-    <div class="row2">
-      <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
+    <div class="seekwrap">
+      <span class="t" data-elapsed>0:00</span>
+      <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position in the lesson">
+      <span class="t right" data-total>0:00</span>
     </div>
-    <div class="row2 sliders">
-      <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
-      <label class="ctl">Volume <input type="range" class="volume" min="0" max="1" step="0.05" value="1"></label>
+    <div class="ctlrow">
+      <span class="lbl">Speed</span>
+      <span class="speeds" role="group" aria-label="Playback speed">
+        <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+        <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+        <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+        <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+      </span>
+      <button class="volbtn" type="button" data-act="mute" data-muted="false" aria-label="Mute" title="Mute">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
     </div>
     <p class="status" data-status role="status" aria-live="polite"></p>
   </section>
@@ -194,21 +280,49 @@
 
   <p style="color:var(--muted);font-size:.92rem;margin:14px 0 0">Many Learn lessons are written text with no video lecture. Read-aloud matters most here, because there is no narration at all today. The same free button works on plain lesson text.</p>
 
-  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" data-next="href:https://learn.wordpress.org/lesson/wordpress-essentials-domains-and-hosting/" aria-label="Listen to this text lesson">
-    <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
-    <p class="hint">A text-only lesson read aloud by the browser. No video was ever recorded for it.</p>
+  <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" data-next="href:https://learn.wordpress.org/lesson/wordpress-essentials-domains-and-hosting/" data-rate="1" data-vol="1" data-muted="false" aria-label="Listen to this text lesson">
+    <div class="ra-top">
+      <div class="ra-menu-wrap">
+        <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Voice and volume settings" title="Voice and volume settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+        </button>
+        <div class="menu" data-menu hidden>
+          <h4>Voice</h4>
+          <div class="vlist" data-vlist></div>
+          <button class="more" type="button" data-act="more" hidden>Show all voices</button>
+          <div class="mrow">
+            <span>Volume</span>
+            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+          </div>
+        </div>
+      </div>
+      <div class="ra-head">
+        <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
+        <p class="hint">A text-only lesson read aloud by the browser. No video was ever recorded for it, so this is the case read-aloud helps most.</p>
+      </div>
+    </div>
     <div class="controls">
       <button class="btn primary" data-act="toggle">&#9654; Listen to this lesson</button>
       <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
       <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
-    <div class="row2">
-      <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
+    <div class="seekwrap">
+      <span class="t" data-elapsed>0:00</span>
+      <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position in the lesson">
+      <span class="t right" data-total>0:00</span>
     </div>
-    <div class="row2 sliders">
-      <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
-      <label class="ctl">Volume <input type="range" class="volume" min="0" max="1" step="0.05" value="1"></label>
+    <div class="ctlrow">
+      <span class="lbl">Speed</span>
+      <span class="speeds" role="group" aria-label="Playback speed">
+        <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+        <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+        <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+        <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+      </span>
+      <button class="volbtn" type="button" data-act="mute" data-muted="false" aria-label="Mute" title="Mute">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
     </div>
     <p class="status" data-status role="status" aria-live="polite"></p>
   </section>
@@ -234,6 +348,13 @@
       <li>Voice quality depends on the device and operating system, so two people may hear different voices.</li>
       <li>Coverage for non-English languages is uneven, and for some (like Urdu) most devices have no voice at all. The Urdu test further down shows this honestly.</li>
     </ul>
+    <h3 id="seeknote">Why the position slider moves in sentences, not seconds</h3>
+    <div class="sentence-note">
+      <p>This one is worth stating plainly, because it shapes the decision. The Web Speech API is fire and forget: it has <strong>no <code>currentTime</code>, no <code>duration</code> and no seek</strong>. You hand it text, it speaks, and that is the whole interface. There is nothing to drag a playhead along.</p>
+      <p>So the slider above is built rather than borrowed. The lesson is split into sentences, each sentence is given an estimated length from its word count and the chosen speed, and dragging the slider restarts playback at the nearest sentence. Progress <em>inside</em> a sentence is tracked with the API's word <code>boundary</code> events where the browser fires them, so the bar follows the actual speech rather than a stopwatch guess.</p>
+      <p>The result works, and rewinding a paragraph you missed is exactly the use people want. But it lands on sentence boundaries, and the total time is an estimate until it has been spoken once. A pre-generated audio file has none of these problems: it is an ordinary <code>&lt;audio&gt;</code> element that seeks to the exact second. That is one more small argument for the file route on flagship lessons.</p>
+    </div>
+
     <h3>Try it with your own device, in any language you have</h3>
     <p>This page reads the list of voices installed in <em>your</em> browser, so you can test it in whatever languages your device supports. Pick a language, pick a voice, edit the text if you like, and press play.</p>
     <div class="detect" id="detectSummary">Checking which voices are installed in your browser ...</div>
@@ -339,6 +460,60 @@
     </table>
     </div>
 
+    <h2 id="lessrobotic" style="margin-top:38px">How to make the voice less robotic</h2>
+    <p class="sub">This was asked directly on the issue, so here is the full answer rather than a one-liner. The headline: <strong>most of the robotic quality is not the browser, it is which voice the browser picked, and by default it usually picks one of the worst ones installed.</strong> Fixing that costs nothing.</p>
+
+    <h3 style="margin-top:24px">1. Why it sounds robotic in the first place</h3>
+    <p>Three generations of text-to-speech are all still shipping on real devices, and a browser will happily hand you any of them:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Generation</th><th>How it works</th><th>Typical examples still installed</th><th>How it sounds</th></tr>
+        <tr><td><strong>Formant</strong></td><td>Generates sound from rules and filters. No human recordings involved at all.</td><td>eSpeak, eSpeak NG, most Linux defaults, some Android fallbacks</td><td>Unmistakably a machine. This is the sound people mean by "robotic".</td></tr>
+        <tr><td><strong>Concatenative</strong> (unit selection)</td><td>Stitches together small fragments of recorded human speech.</td><td>Microsoft David / Zira <em>Desktop</em>, Apple "Compact" voices</td><td>Recognisably human phonemes with audible joins, and flat, samey sentence melody.</td></tr>
+        <tr><td><strong>Neural</strong></td><td>A model generates the waveform, so rhythm and intonation are learned rather than rule-based.</td><td>Microsoft "Online (Natural)", Google network voices, Apple Siri voices, and commercial services like the ElevenLabs clips above</td><td>The jump that stops it sounding robotic. Sentence melody, breath and emphasis land in roughly the right places.</td></tr>
+      </table>
+    </div>
+    <p style="margin-top:10px">Nothing you do with <code>rate</code> and <code>pitch</code> will turn a formant voice into a neural one. Voice selection is the whole ballgame.</p>
+
+    <h3 style="margin-top:24px">2. The fix that costs nothing: choose the voice, do not accept the default</h3>
+    <p><code>speechSynthesis.getVoices()</code> hands back every voice on the device, and the one flagged <code>default</code> is whatever the operating system set years ago, which is very often a legacy voice. A plugin can rank that list and pick the best one present. The rules that do almost all the work:</p>
+    <ul>
+      <li><strong>Prefer names containing "Natural" or "Neural".</strong> On Windows 11 and Edge these are free neural voices and they are dramatically better.</li>
+      <li><strong>Prefer <code>voice.localService === false</code>.</strong> A network voice in Chrome is nearly always better than the local one.</li>
+      <li><strong>Prefer Siri and "Enhanced" or "Premium" voices</strong> on macOS and iOS.</li>
+      <li><strong>Actively demote</strong> anything matching "Compact", "eSpeak", or the "Desktop" suffix, and the novelty voices on macOS (Zarvox, Albert, Bells and the rest), which are otherwise happy to read a WordPress lesson to somebody.</li>
+    </ul>
+    <p><strong>The players on this page now do exactly that.</strong> The four voices in the hamburger menu are the top four on <em>your</em> device by that ranking, tagged <span class="tag free">Natural</span> or <span class="tag ref">Online</span> where they qualify. Compare the top entry with the bottom of the full list and the difference is usually larger than anything else discussed on this issue.</p>
+
+    <h3 style="margin-top:24px">3. What "good" actually looks like per platform</h3>
+    <p>Worth knowing before anyone judges quality from a single machine, because the same plugin genuinely sounds different depending on where it runs:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Platform and browser</th><th>Best free voices usually present</th><th>What it falls back to</th></tr>
+        <tr><td>Windows 11 + <strong>Edge</strong></td><td>Microsoft Ava, Andrew, Emma, Brian <strong>Online (Natural)</strong>. Neural, free, no key.</td><td>Microsoft David / Zira Desktop</td></tr>
+        <tr><td>Windows + <strong>Chrome</strong></td><td>"Google US English" and siblings, network voices</td><td>Microsoft Desktop voices</td></tr>
+        <tr><td>macOS / iOS <strong>Safari</strong></td><td>Siri voices, and Samantha (Enhanced)</td><td>Compact and novelty voices</td></tr>
+        <tr><td>Android <strong>Chrome</strong></td><td>Google Speech Services voices</td><td>Device manufacturer engine, sometimes eSpeak</td></tr>
+        <tr><td>Linux <strong>Firefox</strong></td><td>Whatever speech-dispatcher exposes, often nothing good</td><td>eSpeak, the worst case</td></tr>
+      </table>
+    </div>
+    <p style="margin-top:10px"><strong>The uncomfortable one:</strong> Edge exposes far better voices than Chrome does on the identical Windows machine. So "how robotic is it" partly depends on a browser choice the Learn team does not control. That is a real argument for not relying on the browser route alone for the lessons that matter most.</p>
+
+    <h3 style="margin-top:24px">4. Prosody: what is actually controllable, and what is not</h3>
+    <ul>
+      <li><strong>Only three knobs exist:</strong> <code>rate</code>, <code>pitch</code> and <code>volume</code>. That is the entire tuning surface of the API.</li>
+      <li><strong>Leave pitch alone.</strong> Raising it makes a voice sound more synthetic, not more human. A rate a touch under 1 reads more naturally for instructional content, which is why the presets here go down as well as up.</li>
+      <li><strong>SSML is not available to us.</strong> The spec permits it, but no major browser reliably parses SSML inside a <code>SpeechSynthesisUtterance</code>. Chrome, Edge and Safari treat it as literal text, so a <code>&lt;break&gt;</code> tag gets read out loud. Every "just add SSML pauses" suggestion fails on the browser route. It only works on the server-side services.</li>
+      <li><strong>What does work is chunking,</strong> and it is free. Splitting the lesson into sentences and speaking each as its own utterance gives the engine a clean prosodic reset, which produces real sentence-final falls and real pauses between sentences instead of one long flat run. This page already does it, and it is most of the natural-sounding improvement available without paying anyone.</li>
+      <li><strong>Text preparation matters more than settings.</strong> Expanding "WordPress.org" to something speakable, writing "for example" instead of "e.g.", avoiding ALL CAPS (some engines spell them letter by letter), and keeping raw URLs out of narrated text. For Learn this is a small content style note rather than code, and it would improve every voice at once, free and commercial alike.</li>
+    </ul>
+
+    <h3 style="margin-top:24px">5. The short version</h3>
+    <div class="rec">
+      <p style="margin-top:0"><strong>Most of the fix is free, and it is one function.</strong> Rank the device's voices and pick the best one instead of taking the browser default, speak sentence by sentence, leave pitch alone, and write lesson text that is speakable. On a current Windows or Apple device that alone moves it from "robotic" to "fine", at no cost and with nothing to install on WordPress.org.</p>
+      <p style="margin-bottom:0"><strong>The ceiling is still real.</strong> No browser voice will match a produced narrator, and an older Android or a Linux box will sound poor whatever we pick. So for a small set of flagship lessons, and for non-English, the pre-generated file route is what gets you "not robotic at all", and it still needs no live API and no billing. That is the same split recommended below.</p>
+    </div>
+
     <h2 style="margin-top:34px">What this suggests</h2>
     <div class="rec">
       <ul style="margin:0;padding-left:20px">
@@ -370,19 +545,20 @@
   var synth = window.speechSynthesis;
   var supported = !!synth && typeof window.SpeechSynthesisUtterance === "function";
   var voicesByName = {};
+  var WPS = 2.8; /* words per second at rate 1. Only used for the length estimate. */
 
-  var token=0, active=null, curState="idle";
-  var chunks=[], curIdx=0;
-  var tickInt=null, tStart=0, tAcc=0, tEst=0;
+  var token=0, active=null, curState="idle", needsRestart=false, seeking=false;
+  var chunks=[], chunkDur=[], chunkStart=[], totalDur=0, curIdx=0;
+  var anchorPos=0, anchorT=0;
+  var tickInt=null, uid=0, players=[];
 
-  function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60),x=s%60; return m+":"+(x<10?"0":"")+x; }
-  function estSeconds(text,rate){ var w=(text||"").trim().split(/\s+/).filter(Boolean).length; return w/(2.8*(rate||1)); }
-  function stopTicker(){ if(tickInt){clearInterval(tickInt);tickInt=null;} }
-  function startTicker(p){ stopTicker(); function upd(){ var el=tAcc+(Date.now()-tStart)/1000; p.setStatus(fmt(el)+" / ~"+fmt(tEst)); } upd(); tickInt=setInterval(upd,250); }
+  function fmt(s){ s=Math.max(0,Math.round(s||0)); var m=Math.floor(s/60),x=s%60; return m+":"+(x<10?"0":"")+x; }
+  function wordsOf(t){ return (t||"").trim().split(/\s+/).filter(Boolean).length; }
+  function durOf(t,rate){ var d=wordsOf(t)/(WPS*(rate||1)); return d<0.35?0.35:d; }
 
   function chunkText(t){
     t=(t||"").replace(/\s+/g," ").trim(); if(!t) return [];
-    var parts = t.match(/[^.!?؟۔]+[.!?؟۔]*/g) || [t];
+    var parts = t.match(/[^.!?\u061F\u06D4]+[.!?\u061F\u06D4]*/g) || [t];
     var out=[];
     parts.forEach(function(s){ s=s.trim(); if(!s) return;
       while(s.length>200){ var cut=s.lastIndexOf(" ",200); if(cut<80)cut=200; out.push(s.slice(0,cut).trim()); s=s.slice(cut).trim(); }
@@ -391,57 +567,171 @@
     return out.length?out:[t];
   }
 
+  /* ---- length model. speechSynthesis gives no duration and no seek, so we build both ---- */
+  function measure(rate){
+    chunkDur=[]; chunkStart=[]; totalDur=0;
+    for(var i=0;i<chunks.length;i++){ chunkStart.push(totalDur); var d=durOf(chunks[i],rate); chunkDur.push(d); totalDur+=d; }
+  }
+  function estTotal(text,rate){ var cs=chunkText(text),t=0; for(var i=0;i<cs.length;i++) t+=durOf(cs[i],rate); return t; }
+  function startsFor(cs,rate){ var a=[],acc=0; for(var i=0;i<cs.length;i++){ a.push(acc); acc+=durOf(cs[i],rate); } return a; }
+  function idxForTime(starts,t){ var idx=0; for(var i=0;i<starts.length;i++){ if(t>=starts[i]) idx=i; else break; } return idx; }
+
+  function position(){
+    if(!chunks.length) return 0;
+    if(curIdx>=chunks.length) return totalDur;
+    var w=anchorPos + (curState==="playing"?(Date.now()-anchorT)/1000:0);
+    if(w>chunkDur[curIdx]) w=chunkDur[curIdx];
+    if(w<0) w=0;
+    return Math.min(chunkStart[curIdx]+w, totalDur);
+  }
+
+  function stopTicker(){ if(tickInt){clearInterval(tickInt);tickInt=null;} }
+  function startTicker(p){ stopTicker(); function upd(){ p.paint(position(), totalDur); } upd(); tickInt=setInterval(upd,120); }
+
   function stopAll(){
-    token++; curState="idle"; stopTicker(); tAcc=0; curIdx=0;
+    token++; curState="idle"; needsRestart=false; stopTicker();
+    curIdx=0; anchorPos=0; anchorT=Date.now();
+    chunks=[]; chunkDur=[]; chunkStart=[]; totalDur=0;
     var prev=active; active=null;
     if(supported){ try{synth.cancel();}catch(e){} }
-    if(prev){ prev.render("idle",""); prev.hideNext(); }
+    if(prev){ prev.render("idle",""); prev.hideNext(); prev.primeBar(); }
   }
 
   function speakLoop(p){
     var mine=token;
     (function next(){
       if(mine!==token) return;
-      if(curIdx>=chunks.length){ stopTicker(); curState="idle"; active=null; p.render("idle","Finished · "+fmt(tEst)); p.showNext(); return; }
-      var u=new SpeechSynthesisUtterance(chunks[curIdx]);
-      var o=p.getOpts(); u.lang=o.lang; if(o.voice)u.voice=o.voice; u.rate=o.rate||1; u.volume=(typeof o.volume==="number"&&!isNaN(o.volume))?o.volume:1;
-      u.onend=function(){ if(mine!==token)return; curIdx++; next(); };
-      u.onerror=function(e){ if(mine!==token)return; var err=e&&e.error; if(err==="interrupted"||err==="canceled")return; stopTicker(); curState="idle"; active=null; p.render("idle","Playback error: "+(err||"unknown")+".",true); };
+      if(curIdx>=chunks.length){
+        stopTicker(); curState="idle"; active=null;
+        p.render("idle","Finished, "+fmt(totalDur));
+        p.paint(totalDur,totalDur); p.showNext(); return;
+      }
+      var idx=curIdx, txt=chunks[idx];
+      var u=new SpeechSynthesisUtterance(txt);
+      var o=p.getOpts();
+      u.lang=o.lang; if(o.voice)u.voice=o.voice;
+      u.rate=o.rate||1;
+      u.volume=(typeof o.volume==="number"&&!isNaN(o.volume))?o.volume:1;
+      anchorPos=0; anchorT=Date.now();
+      /* word boundary events anchor the bar to real speech rather than a stopwatch */
+      u.onboundary=function(e){
+        if(mine!==token||curIdx!==idx||!txt.length) return;
+        if(typeof e.charIndex!=="number") return;
+        var f=e.charIndex/txt.length; if(f<0)f=0; if(f>1)f=1;
+        anchorPos=f*chunkDur[idx]; anchorT=Date.now();
+      };
+      u.onend=function(){ if(mine!==token)return; curIdx=idx+1; anchorPos=0; anchorT=Date.now(); next(); };
+      u.onerror=function(e){
+        if(mine!==token)return;
+        var err=e&&e.error; if(err==="interrupted"||err==="canceled")return;
+        stopTicker(); curState="idle"; active=null;
+        p.render("idle","Playback error: "+(err||"unknown")+".",true);
+      };
       try{ synth.speak(u); }catch(e){}
     })();
   }
 
-  function start(p){
+  function start(p, fromIdx){
     stopAll();
-    chunks=chunkText(p.getText()); curIdx=0;
+    chunks=chunkText(p.getText());
     if(!chunks.length){ p.render("idle","Nothing to read.",true); return; }
-    active=p; curState="playing"; p.render("playing"); p.hideNext();
-    tEst=estSeconds(p.getText(), p.getRate()); tAcc=0; tStart=Date.now(); startTicker(p);
-    token++; speakLoop(p);
+    measure(p.getRate());
+    curIdx=Math.max(0, Math.min(fromIdx||0, chunks.length-1));
+    anchorPos=0; anchorT=Date.now();
+    active=p; curState="playing"; needsRestart=false;
+    p.render("playing"); p.hideNext(); startTicker(p);
+    token++;
+    try{ synth.resume(); }catch(e){}
+    speakLoop(p);
   }
 
   function toggle(p){
-    if(active===p && curState==="playing"){ try{synth.pause();}catch(e){} tAcc+=(Date.now()-tStart)/1000; stopTicker(); curState="paused"; p.render("paused"); p.setStatus("Paused · "+fmt(tAcc)+" / ~"+fmt(tEst)); }
-    else if(active===p && curState==="paused"){ try{synth.resume();}catch(e){} tStart=Date.now(); curState="playing"; p.render("playing"); startTicker(p); }
-    else { start(p); }
+    if(active===p && curState==="playing"){
+      try{synth.pause();}catch(e){}
+      anchorPos += (Date.now()-anchorT)/1000;
+      if(chunkDur[curIdx]!==undefined && anchorPos>chunkDur[curIdx]) anchorPos=chunkDur[curIdx];
+      stopTicker(); curState="paused";
+      p.render("paused"); p.paint(position(),totalDur);
+      p.setStatus("Paused at "+fmt(position())+" of "+fmt(totalDur));
+    } else if(active===p && curState==="paused"){
+      curState="playing"; anchorT=Date.now();
+      p.render("playing"); startTicker(p);
+      if(needsRestart){
+        needsRestart=false; token++;
+        try{synth.cancel();}catch(e){} try{synth.resume();}catch(e){}
+        setTimeout(function(){ if(active===p&&curState==="playing") speakLoop(p); },40);
+      } else { try{synth.resume();}catch(e){} }
+    } else { start(p,0); }
   }
-  function stop(p){ if(active===p) stopAll(); else { p.render("idle",""); p.hideNext(); } }
 
-  /* live change of voice / speed / volume: re-speak the current sentence with new settings */
-  var liveTimer=null;
-  function liveChange(p){
-    if(active!==p) return;
-    tEst=estSeconds(p.getText(), p.getRate());
-    if(curState!=="playing") return; /* when paused/idle the change applies to the next sentence automatically */
+  /* seek. Restarts at the nearest sentence, because the API cannot resume mid-utterance. */
+  function seekTo(p, seconds){
+    if(active!==p||!chunks.length) return;
+    var t=Math.max(0,Math.min(seconds,totalDur));
+    var idx=idxForTime(chunkStart,t);
+    curIdx=idx; anchorPos=0; anchorT=Date.now();
     token++;
     try{ synth.cancel(); }catch(e){}
-    setTimeout(function(){ if(active===p && curState==="playing") speakLoop(p); }, 45);
+    if(curState==="playing"){
+      try{ synth.resume(); }catch(e){}
+      setTimeout(function(){ if(active===p&&curState==="playing") speakLoop(p); },40);
+      p.setStatus("Jumped to sentence "+(idx+1)+" of "+chunks.length);
+    } else {
+      needsRestart=true;
+      p.setStatus("Paused at sentence "+(idx+1)+" of "+chunks.length);
+    }
+    p.paint(position(),totalDur);
   }
-  function liveChangeDebounced(p){ if(liveTimer)clearTimeout(liveTimer); liveTimer=setTimeout(function(){ liveChange(p); },140); }
 
-  /* voices */
+  function liveChange(p, remeasure){
+    if(active!==p){ p.primeBar(); return; }
+    if(remeasure){ measure(p.getRate()); if(curIdx>chunks.length-1) curIdx=chunks.length-1; }
+    anchorPos=0; anchorT=Date.now();
+    if(curState==="playing"){
+      token++;
+      try{ synth.cancel(); }catch(e){} try{ synth.resume(); }catch(e){}
+      setTimeout(function(){ if(active===p&&curState==="playing") speakLoop(p); },40);
+    } else if(curState==="paused"){
+      needsRestart=true; token++;
+      try{ synth.cancel(); }catch(e){}
+    }
+    p.paint(position(),totalDur);
+  }
+  var liveTimer=null;
+  function liveChangeDebounced(p,remeasure){ if(liveTimer)clearTimeout(liveTimer); liveTimer=setTimeout(function(){ liveChange(p,remeasure); },140); }
+
+  /* ---- voice quality ranking. This is the practical answer to the robotic-voice question. ---- */
+  function scoreVoice(v){
+    var n=((v.name||"")+" "+(v.voiceURI||""));
+    var s=0;
+    if(/natural|neural/i.test(n)) s+=45;
+    if(/siri/i.test(n)) s+=38;
+    if(/premium|enhanced/i.test(n)) s+=32;
+    if(/google/i.test(n)) s+=28;
+    if(v.localService===false) s+=18;
+    if(/multilingual/i.test(n)) s+=6;
+    if(v.default) s+=4;
+    if(/desktop/i.test(n)) s-=22;
+    if(/compact|espeak|e-speak|pico|festival|flite/i.test(n)) s-=60;
+    if(/novelty|zarvox|bahh|bells|boing|bubbles|cellos|deranged|good news|bad news|jester|organ|superstar|trinoids|whisper|wobble|hysterical|princess|junior/i.test(n)) s-=80;
+    return s;
+  }
+  function rankVoices(list){
+    return list.slice().sort(function(a,b){
+      var d=scoreVoice(b)-scoreVoice(a);
+      if(d) return d;
+      return (a.name||"").localeCompare(b.name||"");
+    });
+  }
+  function badgeFor(v){
+    var n=v.name||"";
+    if(/natural|neural|siri|premium|enhanced/i.test(n)) return ["nat","Natural"];
+    if(/google/i.test(n)||v.localService===false) return ["onl","Online"];
+    return null;
+  }
+
   function langName(code){ try{ var dn=new Intl.DisplayNames([navigator.language||"en"],{type:"language"}); var n=dn.of(code.split("-")[0]); if(n && n.toLowerCase()!==code.split("-")[0].toLowerCase()) return n; }catch(e){} return code; }
-  function shortVoiceLabel(v){ var n=v.name; n=n.replace(/\s*[-–—].*$/,""); n=n.replace(/\s*\([^)]*\)\s*/g," "); n=n.replace(/\s+/g," ").trim(); if(!n) n=v.name; return n+" · "+v.lang; }
+  function shortVoiceLabel(v){ var n=v.name; n=n.replace(/\s*[-\u2013\u2014].*$/,""); n=n.replace(/\s*\([^)]*\)\s*/g," "); n=n.replace(/\s+/g," ").trim(); if(!n) n=v.name; return n+" \u00b7 "+v.lang; }
   function rebuildVoiceIndex(){ voicesByName={}; synth.getVoices().forEach(function(v){ voicesByName[v.name]=v; }); }
 
   function fillPicker(sel, filter){
@@ -450,8 +740,7 @@
     var keep=sel.value; sel.innerHTML="";
     if(!list.length){ var o=document.createElement("option"); o.value=""; o.textContent=(filter==="auto"?"No voices found":"No "+filter.toUpperCase()+" voice on this device"); sel.appendChild(o); sel.disabled=true; return false; }
     sel.disabled=false;
-    list.sort(function(a,b){ return (a.lang+a.name).localeCompare(b.lang+b.name); });
-    list.forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=shortVoiceLabel(v); sel.appendChild(o); });
+    rankVoices(list).forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=shortVoiceLabel(v); sel.appendChild(o); });
     if(keep && voicesByName[keep] && Array.prototype.some.call(sel.options,function(op){return op.value===keep;})) sel.value=keep;
     return true;
   }
@@ -466,100 +755,272 @@
     return codes.length;
   }
 
+  /* ---- the hamburger menu: the best four voices on this device, ranked ---- */
+  function buildMenu(p,panel,filter){
+    var vlist=panel.querySelector("[data-vlist]");
+    var moreBtn=panel.querySelector('[data-act="more"]');
+    if(!vlist) return -1;
+    var all=synth.getVoices();
+    var list=(filter==="auto")?all:all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
+    vlist.innerHTML="";
+    if(!list.length){
+      var none=document.createElement("p"); none.className="none";
+      none.textContent="No "+String(filter).toUpperCase()+" voice is installed on this device.";
+      vlist.appendChild(none);
+      if(moreBtn) moreBtn.hidden=true;
+      panel.removeAttribute("data-voice");
+      return 0;
+    }
+    var ranked=rankVoices(list);
+    var showAll=panel.getAttribute("data-showall")==="1";
+    var shown=showAll?ranked:ranked.slice(0,4);
+    var cur=panel.getAttribute("data-voice");
+    if(!cur||!voicesByName[cur]||!ranked.some(function(v){return v.name===cur;})){ cur=ranked[0].name; panel.setAttribute("data-voice",cur); }
+    if(!shown.some(function(v){return v.name===cur;})) shown=[voicesByName[cur]].concat(ranked.slice(0,3));
+    var gname="ravoice-"+panel.getAttribute("data-uid");
+    shown.forEach(function(v){
+      if(!v) return;
+      var lab=document.createElement("label"); lab.className="vopt";
+      var r=document.createElement("input"); r.type="radio"; r.name=gname; r.value=v.name; r.checked=(v.name===cur);
+      var sp=document.createElement("span"); sp.className="vn"; sp.textContent=shortVoiceLabel(v);
+      lab.appendChild(r); lab.appendChild(sp);
+      var b=badgeFor(v);
+      if(b){ var e=document.createElement("span"); e.className="qb "+b[0]; e.textContent=b[1]; lab.appendChild(e); }
+      r.addEventListener("change",function(){ if(r.checked){ panel.setAttribute("data-voice",v.name); liveChange(p,false); } });
+      vlist.appendChild(lab);
+    });
+    if(moreBtn){
+      if(ranked.length>4){ moreBtn.hidden=false; moreBtn.textContent=showAll?"Show the best 4 only":("Show all "+ranked.length+" voices on this device"); }
+      else moreBtn.hidden=true;
+    }
+    return ranked.length;
+  }
+
+  var SPK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+  var MUT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+
   function makePlayer(panel){
+    panel.setAttribute("data-uid", String(++uid));
+    if(!panel.hasAttribute("data-rate")) panel.setAttribute("data-rate","1");
+    if(!panel.hasAttribute("data-vol")) panel.setAttribute("data-vol","1");
+    if(!panel.hasAttribute("data-muted")) panel.setAttribute("data-muted","false");
+
     var primary=panel.querySelector('[data-act="toggle"]');
     var restart=panel.querySelector('[data-act="restart"]');
     var stopb=panel.querySelector('[data-act="stop"]');
-    var nextBtn=panel.querySelector('.nextlesson');
-    var status=panel.querySelector('[data-status]');
-    var picker=panel.querySelector('.voicePicker');
-    var langSel=panel.querySelector('.langPicker');
-    var rate=panel.querySelector('.rate');
-    var volEl=panel.querySelector('.volume');
-    var textarea=panel.querySelector('textarea');
-    var textid=panel.getAttribute('data-textid');
-    var mode=panel.getAttribute('data-lang');
-    var label=panel.getAttribute('data-label')||'Play';
-    var nextSpec=panel.getAttribute('data-next');
+    var nextBtn=panel.querySelector(".nextlesson");
+    var status=panel.querySelector("[data-status]");
+    var picker=panel.querySelector(".voicePicker");
+    var langSel=panel.querySelector(".langPicker");
+    var rateSlider=panel.querySelector("input.rate");
+    var volSlider=panel.querySelector("input.volume");
+    var speeds=panel.querySelector(".speeds");
+    var muteBtn=panel.querySelector('[data-act="mute"]');
+    var hamb=panel.querySelector('[data-act="menu"]');
+    var menu=panel.querySelector("[data-menu]");
+    var moreBtn=panel.querySelector('[data-act="more"]');
+    var seekEl=panel.querySelector("input.seek");
+    var elapsedEl=panel.querySelector("[data-elapsed]");
+    var totalEl=panel.querySelector("[data-total]");
+    var textarea=panel.querySelector("textarea");
+    var textid=panel.getAttribute("data-textid");
+    var mode=panel.getAttribute("data-lang");
+    var label=panel.getAttribute("data-label")||"Play";
+    var nextSpec=panel.getAttribute("data-next");
+    var vfilter = picker ? picker.getAttribute("data-langfilter") : (mode==="auto"?"auto":(mode==="ur"?"ur":"en"));
 
     var p={
-      getText:function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:''; },
-      getRate:function(){ return rate?(parseFloat(rate.value)||1):1; },
+      getText:function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:""; },
+      getRate:function(){ return parseFloat(panel.getAttribute("data-rate"))||1; },
+      getVolume:function(){ if(panel.getAttribute("data-muted")==="true") return 0; var v=parseFloat(panel.getAttribute("data-vol")); return isNaN(v)?1:v; },
+      currentVoice:function(){
+        if(picker && picker.value) return voicesByName[picker.value]||null;
+        var n=panel.getAttribute("data-voice");
+        return n?(voicesByName[n]||null):null;
+      },
       getOpts:function(){
-        var l=mode==="auto"?(langSel&&langSel.value||"en-US"):(mode==="ur"?"ur-PK":"en-US");
-        var v=null; if(picker&&picker.value){ v=voicesByName[picker.value]||null; if(v) l=v.lang; }
-        return { lang:l, voice:v, rate:this.getRate(), volume: volEl?(parseFloat(volEl.value)):1 };
+        var l = mode==="auto" ? ((langSel&&langSel.value)||"en-US") : (mode==="ur"?"ur-PK":"en-US");
+        var v=this.currentVoice(); if(v) l=v.lang;
+        return { lang:l, voice:v, rate:this.getRate(), volume:this.getVolume() };
       },
       render:function(st,msg,err){
         panel.setAttribute("data-state",st);
-        if(st==="idle"){ primary.innerHTML="&#9654; "+label; if(restart)restart.hidden=true; if(stopb)stopb.hidden=true; }
-        else if(st==="playing"){ primary.innerHTML="&#9208; Pause"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
-        else if(st==="paused"){ primary.innerHTML="&#9654; Resume"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
+        if(st==="idle"){ if(primary)primary.innerHTML="&#9654; "+label; if(restart)restart.hidden=true; if(stopb)stopb.hidden=true; }
+        else if(st==="playing"){ if(primary)primary.innerHTML="&#9208; Pause"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; if(msg===undefined)msg="Playing"; }
+        else if(st==="paused"){ if(primary)primary.innerHTML="&#9654; Resume"; if(restart)restart.hidden=false; if(stopb)stopb.hidden=false; }
         if(status && msg!==undefined){ status.textContent=msg; status.classList.toggle("err",!!err); }
       },
       setStatus:function(txt){ if(status){ status.textContent=txt; status.classList.remove("err"); } },
+      paint:function(pos,total){
+        if(elapsedEl) elapsedEl.textContent=fmt(pos);
+        if(totalEl) totalEl.textContent=fmt(total);
+        if(seekEl && !seeking) seekEl.value = total>0 ? String(Math.round((pos/total)*1000)) : "0";
+      },
+      primeBar:function(){
+        if(!seekEl && !totalEl) return;
+        var t=estTotal(this.getText(), this.getRate());
+        if(elapsedEl) elapsedEl.textContent="0:00";
+        if(totalEl) totalEl.textContent=fmt(t);
+        if(seekEl && !seeking) seekEl.value="0";
+      },
       showNext:function(){ if(nextBtn) nextBtn.hidden=false; },
       hideNext:function(){ if(nextBtn) nextBtn.hidden=true; }
     };
 
+    function setMuted(m){
+      panel.setAttribute("data-muted", m?"true":"false");
+      if(muteBtn){
+        muteBtn.setAttribute("data-muted", m?"true":"false");
+        muteBtn.innerHTML = m?MUT:SPK;
+        muteBtn.setAttribute("aria-label", m?"Unmute":"Mute");
+        muteBtn.title = m?"Unmute":"Mute";
+      }
+    }
+    function closeMenu(){ if(menu) menu.hidden=true; if(hamb) hamb.setAttribute("aria-expanded","false"); }
+    function openMenu(){
+      document.querySelectorAll("[data-menu]").forEach(function(m){
+        if(m!==menu){ m.hidden=true; var h=m.parentNode.querySelector('[data-act="menu"]'); if(h) h.setAttribute("aria-expanded","false"); }
+      });
+      buildMenu(p,panel,vfilter);
+      if(menu) menu.hidden=false;
+      if(hamb) hamb.setAttribute("aria-expanded","true");
+    }
+
     if(primary) primary.addEventListener("click",function(){ toggle(p); });
-    if(restart) restart.addEventListener("click",function(){ start(p); });
-    if(stopb) stopb.addEventListener("click",function(){ stop(p); });
+    if(restart) restart.addEventListener("click",function(){ start(p,0); });
+    if(stopb) stopb.addEventListener("click",function(){ if(active===p) stopAll(); else { p.render("idle",""); p.hideNext(); p.primeBar(); } });
     if(nextBtn && nextSpec) nextBtn.addEventListener("click",function(){
       if(nextSpec.indexOf("scroll:")===0){ var t=document.querySelector(nextSpec.slice(7)); if(t) t.scrollIntoView({behavior:"smooth",block:"start"}); }
       else if(nextSpec.indexOf("href:")===0){ window.open(nextSpec.slice(5),"_blank","noopener"); }
     });
-    if(rate) rate.addEventListener("input",function(){ liveChangeDebounced(p); });
-    if(volEl) volEl.addEventListener("input",function(){ liveChangeDebounced(p); });
-    if(picker) picker.addEventListener("change",function(){ liveChange(p); });
 
-    p.render("idle");
+    /* speed presets */
+    if(speeds) speeds.addEventListener("click",function(ev){
+      var b=ev.target.closest("button[data-rate]"); if(!b) return;
+      var r=parseFloat(b.getAttribute("data-rate"))||1;
+      panel.setAttribute("data-rate",String(r));
+      Array.prototype.forEach.call(speeds.querySelectorAll("button[data-rate]"),function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+      if(active===p) liveChange(p,true); else p.primeBar();
+    });
+    /* legacy rate slider, still used by the universal tester */
+    if(rateSlider) rateSlider.addEventListener("input",function(){
+      panel.setAttribute("data-rate",String(parseFloat(rateSlider.value)||1));
+      if(active===p) liveChangeDebounced(p,true); else p.primeBar();
+    });
+    /* volume slider, in the menu on the lesson players and inline on the tester */
+    if(volSlider) volSlider.addEventListener("input",function(){
+      panel.setAttribute("data-vol",String(parseFloat(volSlider.value)));
+      if(panel.getAttribute("data-muted")==="true") setMuted(false);
+      if(active===p) liveChangeDebounced(p,false);
+    });
+    if(muteBtn) muteBtn.addEventListener("click",function(){
+      setMuted(panel.getAttribute("data-muted")!=="true");
+      if(active===p) liveChange(p,false);
+    });
+
+    if(hamb) hamb.addEventListener("click",function(ev){ ev.stopPropagation(); if(menu && menu.hidden) openMenu(); else closeMenu(); });
+    if(menu) menu.addEventListener("click",function(ev){ ev.stopPropagation(); });
+    if(moreBtn) moreBtn.addEventListener("click",function(){
+      panel.setAttribute("data-showall", panel.getAttribute("data-showall")==="1"?"0":"1");
+      buildMenu(p,panel,vfilter);
+    });
+    if(menu){
+      document.addEventListener("click",closeMenu);
+      document.addEventListener("keydown",function(e){ if(e.key==="Escape"||e.key==="Esc") closeMenu(); });
+    }
+
+    if(seekEl){
+      seekEl.addEventListener("pointerdown",function(){ seeking=true; });
+      seekEl.addEventListener("input",function(){
+        seeking=true;
+        var tot=(active===p)?totalDur:estTotal(p.getText(),p.getRate());
+        if(elapsedEl) elapsedEl.textContent=fmt((parseFloat(seekEl.value)/1000)*tot);
+      });
+      seekEl.addEventListener("change",function(){
+        var tot=(active===p)?totalDur:estTotal(p.getText(),p.getRate());
+        var t=(parseFloat(seekEl.value)/1000)*tot;
+        seeking=false;
+        if(active===p) seekTo(p,t);
+        else { var cs=chunkText(p.getText()); start(p, idxForTime(startsFor(cs,p.getRate()), t)); }
+      });
+    }
+    if(picker) picker.addEventListener("change",function(){ liveChange(p,false); });
+    if(textarea) textarea.addEventListener("input",function(){ if(active!==p) p.primeBar(); });
+
+    setMuted(panel.getAttribute("data-muted")==="true");
+    p.render("idle","");
+    p.primeBar();
+    players.push({p:p, panel:panel, filter:vfilter});
     return p;
   }
 
   function populateAll(){
     rebuildVoiceIndex();
-    document.querySelectorAll('.langPicker').forEach(function(s){ fillLangPicker(s); });
-    document.querySelectorAll('.voicePicker').forEach(function(s){
-      var f=s.getAttribute('data-langfilter');
-      if(f==="auto"){ var lp=s.closest('.splayer').querySelector('.langPicker'); fillPicker(s, lp?lp.value:"auto"); }
+    document.querySelectorAll(".langPicker").forEach(function(s){ fillLangPicker(s); });
+    document.querySelectorAll(".voicePicker").forEach(function(s){
+      var f=s.getAttribute("data-langfilter");
+      if(f==="auto"){ var sp=s.closest(".splayer"); var lp=sp?sp.querySelector(".langPicker"):null; fillPicker(s, lp?lp.value:"auto"); }
       else fillPicker(s,f);
     });
-    var summary=document.getElementById('detectSummary');
-    if(summary){ var all=synth.getVoices(); var langs={}; all.forEach(function(v){langs[v.lang]=1;}); var n=all.length,m=Object.keys(langs).length;
-      summary.textContent = n?("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below."):"No speech voices were detected in this browser."; }
+    players.forEach(function(rec){
+      if(!rec.panel.querySelector("[data-vlist]")) return;
+      var n=buildMenu(rec.p, rec.panel, rec.filter);
+      if(rec.panel.getAttribute("data-state")==="idle"){
+        var st=rec.panel.querySelector("[data-status]");
+        if(st){
+          if(n===0){ st.textContent="This device has no "+String(rec.filter).toUpperCase()+" voice installed, so the free browser route cannot read this lesson."; st.classList.add("err"); }
+          else if(st.classList.contains("err")){ st.textContent=""; st.classList.remove("err"); }
+        }
+      }
+      rec.p.primeBar();
+    });
+    var summary=document.getElementById("detectSummary");
+    if(summary){
+      var all=synth.getVoices(), langs={};
+      all.forEach(function(v){ langs[v.lang]=1; });
+      var n=all.length, m=Object.keys(langs).length;
+      summary.textContent = n?("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below."):"No speech voices were detected in this browser.";
+    }
   }
 
   if(!supported){
-    document.querySelectorAll('.status').forEach(function(el){ el.textContent="This browser does not support the Web Speech API, so the free browser route is unavailable here."; el.classList.add("err"); });
-    document.querySelectorAll('button.primary').forEach(function(b){ b.disabled=true; });
-    var ds=document.getElementById('detectSummary'); if(ds) ds.textContent="This browser does not support on-device speech (Web Speech API).";
+    document.querySelectorAll(".status").forEach(function(el){ el.textContent="This browser does not support the Web Speech API, so the free browser route is unavailable here."; el.classList.add("err"); });
+    document.querySelectorAll("button.primary, .speeds button, button.volbtn, button.hamb").forEach(function(b){ b.disabled=true; });
+    document.querySelectorAll("input.seek").forEach(function(s){ s.disabled=true; });
+    var ds=document.getElementById("detectSummary"); if(ds) ds.textContent="This browser does not support on-device speech (Web Speech API).";
   } else {
-    document.querySelectorAll('.splayer').forEach(function(panel){ makePlayer(panel); });
-    document.querySelectorAll('.langPicker').forEach(function(lp){
-      lp.addEventListener('change',function(){ var vp=lp.closest('.splayer').querySelector('.voicePicker[data-langfilter="auto"]'); if(vp) fillPicker(vp, lp.value); });
+    document.querySelectorAll(".splayer").forEach(function(panel){ makePlayer(panel); });
+    document.querySelectorAll(".langPicker").forEach(function(lp){
+      lp.addEventListener("change",function(){
+        var sp=lp.closest(".splayer");
+        var vp=sp?sp.querySelector('.voicePicker[data-langfilter="auto"]'):null;
+        if(vp) fillPicker(vp, lp.value);
+      });
     });
     populateAll();
     if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=populateAll; }
     setTimeout(populateAll,300);
     setTimeout(function(){
       document.querySelectorAll('.voicePicker[data-langfilter="ur"]').forEach(function(s){
-        if(s.disabled){ var st=s.closest('.splayer').querySelector('[data-status]'); if(st){ st.textContent="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows."; st.classList.add("err"); } }
+        if(s.disabled){
+          var sp=s.closest(".splayer"); var st=sp?sp.querySelector("[data-status]"):null;
+          if(st){ st.textContent="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows."; st.classList.add("err"); }
+        }
       });
     },500);
   }
 
   /* commercial voice choosers */
-  document.querySelectorAll('.voiceSelect').forEach(function(sel){
-    sel.addEventListener('change',function(){
-      var audio=document.getElementById(sel.getAttribute('data-target')); if(!audio) return;
+  document.querySelectorAll(".voiceSelect").forEach(function(sel){
+    sel.addEventListener("change",function(){
+      var audio=document.getElementById(sel.getAttribute("data-target")); if(!audio) return;
       var playing=!audio.paused && !audio.ended;
-      audio.src='audio/'+sel.getAttribute('data-prefix')+'-'+sel.value+'.mp3';
+      audio.src="audio/"+sel.getAttribute("data-prefix")+"-"+sel.value+".mp3";
       audio.load(); if(playing){ audio.play().catch(function(){}); }
     });
   });
-  document.querySelectorAll('audio').forEach(function(a){
-    a.addEventListener('play',function(){ if(supported) stopAll(); document.querySelectorAll('audio').forEach(function(b){ if(b!==a) b.pause(); }); });
+  document.querySelectorAll("audio").forEach(function(a){
+    a.addEventListener("play",function(){ if(supported) stopAll(); document.querySelectorAll("audio").forEach(function(b){ if(b!==a) b.pause(); }); });
   });
 })();
 </script>
