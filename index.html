@@ -148,6 +148,7 @@
   .menu .vopt .qb{margin-left:auto;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 6px;border-radius:3px;flex:0 0 auto}
   .menu .qb.nat{background:#e6f4ea;color:var(--free)}
   .menu .qb.onl{background:#e9edff;color:var(--ref)}
+  .menu .qb.cml{background:#fbf0da;color:var(--commercial)}
   .menu .more{background:none;border:0;color:var(--wp);font:inherit;font-size:.82rem;cursor:pointer;padding:6px 2px 2px;text-align:left}
   .menu .more:hover{text-decoration:underline}
   .menu .mrow{display:flex;align-items:center;gap:9px;border-top:1px solid var(--line);margin-top:9px;padding-top:10px;font-size:.82rem;color:var(--muted)}
@@ -168,6 +169,25 @@
   .speeds button:hover{background:#f0f0f1}
   .speeds button[aria-pressed="true"]{background:var(--wp);color:#fff}
 
+  .vol-wrap{position:relative;display:inline-flex;flex:0 0 auto}
+  .volpop{position:absolute;top:46px;left:50%;transform:translateX(-50%);z-index:30;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:9px 11px;display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .volpop input[type=range]{width:104px;flex:0 0 auto;margin:0}
+  button.vstep{border:1px solid var(--line);background:#fff;border-radius:5px;width:27px;height:27px;font:inherit;font-size:1.05rem;line-height:1;cursor:pointer;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+  button.vstep:hover{background:#f0f0f1}
+  button.vstep:disabled{opacity:.4;cursor:not-allowed}
+  .volpop .vval{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:40px;text-align:right}
+  button.vmute{border:1px solid var(--line);background:#fff;border-radius:5px;font:inherit;font-size:.75rem;font-weight:600;padding:6px 9px;cursor:pointer;color:var(--muted)}
+  button.vmute:hover{background:#f0f0f1}
+  button.vmute[aria-pressed="true"]{background:#fcebec;border-color:var(--warn);color:var(--warn)}
+  .menu .langPicker{width:100%;margin-bottom:2px}
+  .rowc .ra-top{margin-bottom:2px}
+  .rowc .ra-head h3{margin-top:0}
+  @media (max-width:600px){
+    .volpop{padding:8px 9px;gap:5px}
+    .volpop input[type=range]{width:76px}
+    .volpop .vval{min-width:34px;font-size:.72rem}
+    button.vmute{padding:6px 7px;font-size:.7rem}
+  }
   .whatsnew{background:#e6f4ea;border:1px solid #9cd2b2;border-radius:8px;padding:15px 18px;margin:20px 0 4px}
   .whatsnew h3{margin:0 0 6px;font-size:1rem;color:#00593a}
   .whatsnew ul{margin:6px 0 0;padding-left:20px;font-size:.9rem}
@@ -204,9 +224,9 @@
     <h3>Updated 10 September, from the feedback on the issue</h3>
     <ul>
       <li><strong>Speed is a set of presets now</strong> (0.5&times;, 1&times;, 1.5&times;, 2&times;) rather than a slider.</li>
-      <li><strong>Volume is a button</strong> that mutes and unmutes. The fine volume slider moved into the settings menu, so the main row stays simple.</li>
-      <li><strong>A position slider was added</strong>, so a listener can rewind or skip forward. It moves in sentence steps rather than seconds, which is a real limit of the browser engine rather than a shortcut: see <a href="#seeknote">why the slider moves in sentences</a>.</li>
-      <li><strong>Voice selection moved into the hamburger menu at the top left</strong> of each player, and it lists <strong>the best four voices your own device has</strong>, ranked automatically rather than listed alphabetically.</li>
+      <li><strong>Volume is a button.</strong> It opens a small control with volume up, volume down, a slider and mute, so the main row stays simple but the level is still adjustable.</li>
+      <li><strong>A position slider was added</strong>, so a listener can rewind or skip forward. It seeks to the word, not to the start of the sentence, which took some work because the browser speech API has no seek at all: see <a href="#seeknote">how the position slider works</a>.</li>
+      <li><strong>Voice selection moved into the hamburger menu at the top left</strong> of each player, and it lists <strong>the best four voices your own device has</strong>, ranked automatically rather than listed alphabetically. <strong>Every section on this page now uses the same controls</strong>: both lesson players, both comparison rows, the language tester, and the two commercial voice rows, which now pick their voice from the same menu rather than a dropdown.</li>
       <li><strong>An answer on the robotic voice</strong> is at the end of the page: <a href="#lessrobotic">how to make it sound less robotic</a>. Short version, choosing the voice instead of accepting the browser default is most of the fix, and it is free.</li>
     </ul>
   </div>
@@ -218,23 +238,19 @@
 
   <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson1Body" data-label="Listen to this lesson" data-next="scroll:#lesson2sec" data-rate="1" data-vol="1" data-muted="false" aria-label="Listen to this lesson">
     <div class="ra-top">
-      <div class="ra-menu-wrap">
-        <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Voice and volume settings" title="Voice and volume settings">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
-        </button>
-        <div class="menu" data-menu hidden>
-          <h4>Voice</h4>
-          <div class="vlist" data-vlist></div>
-          <button class="more" type="button" data-act="more" hidden>Show all voices</button>
-          <div class="mrow">
-            <span>Volume</span>
-            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+        <div class="ra-menu-wrap">
+          <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Language and voice settings" title="Language and voice settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+          </button>
+          <div class="menu" data-menu hidden>
+            <h4>Voice</h4>
+            <div class="vlist" data-vlist></div>
+            <button class="more" type="button" data-act="more" hidden>Show all voices</button>
           </div>
         </div>
-      </div>
       <div class="ra-head">
         <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
-        <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. Speed presets, a mute button, and a position slider so you can rewind or skip ahead. Voice choice is in the menu at the top left.</p>
+        <p class="hint">The proposed feature: a button that reads the lesson text aloud with the browser's own voice. Speed presets, a volume button and a position slider that seeks to the word. Voice choice is in the menu at the top left.</p>
       </div>
     </div>
     <div class="controls">
@@ -243,24 +259,31 @@
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
       <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
-    <div class="seekwrap">
-      <span class="t" data-elapsed>0:00</span>
-      <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position in the lesson">
-      <span class="t right" data-total>0:00</span>
-    </div>
-    <div class="ctlrow">
-      <span class="lbl">Speed</span>
-      <span class="speeds" role="group" aria-label="Playback speed">
-        <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
-        <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
-        <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
-        <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
-      </span>
-      <button class="volbtn" type="button" data-act="mute" data-muted="false" aria-label="Mute" title="Mute">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-      </button>
-    </div>
-    <p class="status" data-status role="status" aria-live="polite"></p>
+      <div class="seekwrap">
+        <span class="t" data-elapsed>0:00</span>
+        <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position">
+        <span class="t right" data-total>0:00</span>
+      </div>
+      <div class="ctlrow">
+        <span class="lbl">Speed</span>
+        <span class="speeds" role="group" aria-label="Playback speed">
+          <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+          <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+          <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+          <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+        </span>
+        <span class="vol-wrap">
+          <button class="volbtn" data-act="volmenu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Volume" title="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+          <span class="volpop" data-volpop hidden>
+            <button class="vstep" type="button" data-act="voldown" aria-label="Volume down" title="Volume down">&minus;</button>
+            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume level">
+            <button class="vstep" type="button" data-act="volup" aria-label="Volume up" title="Volume up">+</button>
+            <span class="vval" data-volval>100%</span>
+            <button class="vmute" type="button" data-act="mute" aria-pressed="false">Mute</button>
+          </span>
+        </span>
+      </div>
+      <p class="status" data-status role="status" aria-live="polite"></p>
   </section>
 
   <div class="video-wrap"><iframe title="Intro to Block Patterns (VideoPress)" src="https://video.wordpress.com/embed/g4Q6MkSO?hd=1" allowfullscreen allow="clipboard-write"></iframe></div>
@@ -282,20 +305,16 @@
 
   <section class="listen splayer" data-state="idle" data-lang="en" data-textid="lesson2Body" data-label="Listen to this lesson" data-next="href:https://learn.wordpress.org/lesson/wordpress-essentials-domains-and-hosting/" data-rate="1" data-vol="1" data-muted="false" aria-label="Listen to this text lesson">
     <div class="ra-top">
-      <div class="ra-menu-wrap">
-        <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Voice and volume settings" title="Voice and volume settings">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
-        </button>
-        <div class="menu" data-menu hidden>
-          <h4>Voice</h4>
-          <div class="vlist" data-vlist></div>
-          <button class="more" type="button" data-act="more" hidden>Show all voices</button>
-          <div class="mrow">
-            <span>Volume</span>
-            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+        <div class="ra-menu-wrap">
+          <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Language and voice settings" title="Language and voice settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+          </button>
+          <div class="menu" data-menu hidden>
+            <h4>Voice</h4>
+            <div class="vlist" data-vlist></div>
+            <button class="more" type="button" data-act="more" hidden>Show all voices</button>
           </div>
         </div>
-      </div>
       <div class="ra-head">
         <div class="lead"><span class="spk">&#128266;</span> Listen to this lesson <span class="free">Free &middot; on your device</span></div>
         <p class="hint">A text-only lesson read aloud by the browser. No video was ever recorded for it, so this is the case read-aloud helps most.</p>
@@ -307,24 +326,31 @@
       <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
       <button class="btn next nextlesson" data-act="next" hidden>Next lesson &rarr;</button>
     </div>
-    <div class="seekwrap">
-      <span class="t" data-elapsed>0:00</span>
-      <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position in the lesson">
-      <span class="t right" data-total>0:00</span>
-    </div>
-    <div class="ctlrow">
-      <span class="lbl">Speed</span>
-      <span class="speeds" role="group" aria-label="Playback speed">
-        <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
-        <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
-        <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
-        <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
-      </span>
-      <button class="volbtn" type="button" data-act="mute" data-muted="false" aria-label="Mute" title="Mute">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-      </button>
-    </div>
-    <p class="status" data-status role="status" aria-live="polite"></p>
+      <div class="seekwrap">
+        <span class="t" data-elapsed>0:00</span>
+        <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position">
+        <span class="t right" data-total>0:00</span>
+      </div>
+      <div class="ctlrow">
+        <span class="lbl">Speed</span>
+        <span class="speeds" role="group" aria-label="Playback speed">
+          <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+          <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+          <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+          <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+        </span>
+        <span class="vol-wrap">
+          <button class="volbtn" data-act="volmenu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Volume" title="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+          <span class="volpop" data-volpop hidden>
+            <button class="vstep" type="button" data-act="voldown" aria-label="Volume down" title="Volume down">&minus;</button>
+            <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume level">
+            <button class="vstep" type="button" data-act="volup" aria-label="Volume up" title="Volume up">+</button>
+            <span class="vval" data-volval>100%</span>
+            <button class="vmute" type="button" data-act="mute" aria-pressed="false">Mute</button>
+          </span>
+        </span>
+      </div>
+      <p class="status" data-status role="status" aria-live="polite"></p>
   </section>
 
   <div class="lesson-body" id="lesson2Body">
@@ -348,24 +374,33 @@
       <li>Voice quality depends on the device and operating system, so two people may hear different voices.</li>
       <li>Coverage for non-English languages is uneven, and for some (like Urdu) most devices have no voice at all. The Urdu test further down shows this honestly.</li>
     </ul>
-    <h3 id="seeknote">Why the position slider moves in sentences, not seconds</h3>
+    <h3 id="seeknote">How the position slider works, since the API has no seek</h3>
     <div class="sentence-note">
-      <p>This one is worth stating plainly, because it shapes the decision. The Web Speech API is fire and forget: it has <strong>no <code>currentTime</code>, no <code>duration</code> and no seek</strong>. You hand it text, it speaks, and that is the whole interface. There is nothing to drag a playhead along.</p>
-      <p>So the slider above is built rather than borrowed. The lesson is split into sentences, each sentence is given an estimated length from its word count and the chosen speed, and dragging the slider restarts playback at the nearest sentence. Progress <em>inside</em> a sentence is tracked with the API's word <code>boundary</code> events where the browser fires them, so the bar follows the actual speech rather than a stopwatch guess.</p>
-      <p>The result works, and rewinding a paragraph you missed is exactly the use people want. But it lands on sentence boundaries, and the total time is an estimate until it has been spoken once. A pre-generated audio file has none of these problems: it is an ordinary <code>&lt;audio&gt;</code> element that seeks to the exact second. That is one more small argument for the file route on flagship lessons.</p>
+      <p>Worth stating plainly, because it shapes the decision. The Web Speech API is fire and forget: it has <strong>no <code>currentTime</code>, no <code>duration</code> and no seek</strong>. You hand it text, it speaks, and that is the whole interface. There is nothing to drag a playhead along.</p>
+      <p>So the slider above is built rather than borrowed. The lesson is split into sentences and each is measured from its word count and the chosen speed. Dragging the slider works out which sentence that time falls in, <strong>then starts speaking from the nearest word inside it</strong> rather than from the top of the sentence, so nudging forward five seconds moves you five seconds. Progress is then tracked with the API's word <code>boundary</code> events, so the bar follows the actual speech rather than a stopwatch.</p>
+      <p>Two honest limits remain. The total length is an estimate until the lesson has been spoken once, because the API will not tell you how long anything takes. And every seek restarts an utterance, so there is a small gap of a few dozen milliseconds. A pre-generated audio file has neither problem: it is an ordinary <code>&lt;audio&gt;</code> element with a real duration that seeks to the exact second. One more small argument for the file route on flagship lessons.</p>
     </div>
 
     <h3>Try it with your own device, in any language you have</h3>
-    <p>This page reads the list of voices installed in <em>your</em> browser, so you can test it in whatever languages your device supports. Pick a language, pick a voice, edit the text if you like, and press play.</p>
+    <p>This page reads the list of voices installed in <em>your</em> browser, so you can test it in whatever languages your device supports. Open the menu on the player below, pick a language and a voice, edit the text if you like, and press play.</p>
     <div class="detect" id="detectSummary">Checking which voices are installed in your browser ...</div>
-    <section class="splayer" data-state="idle" data-lang="auto" aria-label="Try the browser voice">
-      <div class="row2">
-        <label class="ctl">Language <select class="langPicker"></select></label>
-        <label class="ctl">Voice <select class="voicePicker" data-langfilter="auto"></select></label>
-      </div>
-      <div class="row2 sliders">
-        <label class="ctl">Speed <input type="range" class="rate" min="0.7" max="1.3" step="0.05" value="1"></label>
-        <label class="ctl">Volume <input type="range" class="volume" min="0" max="1" step="0.05" value="1"></label>
+    <section class="splayer" data-state="idle" data-lang="auto" data-rate="1" data-vol="1" data-muted="false" aria-label="Try the browser voice">
+      <div class="ra-top">
+          <div class="ra-menu-wrap">
+            <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Language and voice settings" title="Language and voice settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+            </button>
+            <div class="menu" data-menu hidden>
+              <h4>Language</h4>
+              <select class="langPicker" aria-label="Language"></select>
+              <h4 style="margin-top:11px">Voice</h4>
+              <div class="vlist" data-vlist></div>
+              <button class="more" type="button" data-act="more" hidden>Show all voices</button>
+            </div>
+          </div>
+        <div class="ra-head">
+          <p class="hint" style="margin:7px 0 0">Language and voice are in the menu on the left, which lists the best four voices your device has for the language you pick. Edit the text below if you like.</p>
+        </div>
       </div>
       <textarea class="trytext" spellcheck="false">The block editor turns your content into blocks. You add a block, move it, and change its settings. This sentence is being read by your own device, with no service behind it.</textarea>
       <div class="controls" style="margin-top:10px">
@@ -373,7 +408,31 @@
         <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
         <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
       </div>
-      <p class="status" data-status role="status" aria-live="polite"></p>
+        <div class="seekwrap">
+          <span class="t" data-elapsed>0:00</span>
+          <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position">
+          <span class="t right" data-total>0:00</span>
+        </div>
+        <div class="ctlrow">
+          <span class="lbl">Speed</span>
+          <span class="speeds" role="group" aria-label="Playback speed">
+            <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+            <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+            <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+            <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+          </span>
+          <span class="vol-wrap">
+            <button class="volbtn" data-act="volmenu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Volume" title="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+            <span class="volpop" data-volpop hidden>
+              <button class="vstep" type="button" data-act="voldown" aria-label="Volume down" title="Volume down">&minus;</button>
+              <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume level">
+              <button class="vstep" type="button" data-act="volup" aria-label="Volume up" title="Volume up">+</button>
+              <span class="vval" data-volval>100%</span>
+              <button class="vmute" type="button" data-act="mute" aria-pressed="false">Mute</button>
+            </span>
+          </span>
+        </div>
+        <p class="status" data-status role="status" aria-live="polite"></p>
     </section>
   </div>
 </main>
@@ -387,28 +446,76 @@
     <h3 style="margin-top:24px">English, the same passage</h3>
     <div class="passage"><p class="en" id="enPassage">If you're already familiar with the Block Editor, or have already seen the previous video, today we're going to take a look at Block Patterns, what they are, and of course, how to use them. Let's get started.</p></div>
 
-    <div class="rowc free splayer" data-state="idle" data-lang="en" data-textid="enPassage" data-label="Play browser voice">
-      <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
-      <p class="note">Web Speech API. No service, no account, no cost. Uses the voices already on this device.</p>
+    <div class="rowc free splayer" data-state="idle" data-lang="en" data-textid="enPassage" data-label="Play browser voice" data-rate="1" data-vol="1" data-muted="false">
+      <div class="ra-top">
+          <div class="ra-menu-wrap">
+            <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Language and voice settings" title="Language and voice settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+            </button>
+            <div class="menu" data-menu hidden>
+              <h4>Voice</h4>
+              <div class="vlist" data-vlist></div>
+              <button class="more" type="button" data-act="more" hidden>Show all voices</button>
+            </div>
+          </div>
+        <div class="ra-head">
+          <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
+        <p class="note">Web Speech API. No service, no account, no cost. Uses the voices already on this device.</p>
+        </div>
+      </div>
       <div class="controls">
         <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
         <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
         <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
-        <label class="ctl">Voice <select class="voicePicker" data-langfilter="en"></select></label>
       </div>
-      <p class="status" data-status role="status" aria-live="polite"></p>
+        <div class="seekwrap">
+          <span class="t" data-elapsed>0:00</span>
+          <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position">
+          <span class="t right" data-total>0:00</span>
+        </div>
+        <div class="ctlrow">
+          <span class="lbl">Speed</span>
+          <span class="speeds" role="group" aria-label="Playback speed">
+            <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+            <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+            <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+            <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+          </span>
+          <span class="vol-wrap">
+            <button class="volbtn" data-act="volmenu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Volume" title="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+            <span class="volpop" data-volpop hidden>
+              <button class="vstep" type="button" data-act="voldown" aria-label="Volume down" title="Volume down">&minus;</button>
+              <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume level">
+              <button class="vstep" type="button" data-act="volup" aria-label="Volume up" title="Volume up">+</button>
+              <span class="vval" data-volval>100%</span>
+              <button class="vmute" type="button" data-act="mute" aria-pressed="false">Mute</button>
+            </span>
+          </span>
+        </div>
+        <p class="status" data-status role="status" aria-live="polite"></p>
     </div>
 
-    <div class="rowc commercial">
-      <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
-      <p class="note">Pre-generated with ElevenLabs. Choose a voice:
-        <select class="voiceSelect" data-target="enAudio" data-prefix="en" aria-label="English commercial voice">
-          <option value="bella">Bella (Female)</option>
-          <option value="sarah">Sarah (Female)</option>
-          <option value="eric">Eric (Male)</option>
-          <option value="george">George (Male, British)</option>
-        </select>
-      </p>
+    <div class="rowc commercial cvoice" data-prefix="en" data-target="enAudio">
+      <div class="ra-top">
+        <div class="ra-menu-wrap">
+          <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Choose the commercial voice" title="Choose the commercial voice">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+          </button>
+          <div class="menu" data-menu hidden>
+            <h4>Voice</h4>
+            <div class="vlist">
+          <label class="vopt"><input type="radio" name="cvoice-en" value="bella" checked><span class="vn">Bella</span><span class="qb cml">Female</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-en" value="sarah"><span class="vn">Sarah</span><span class="qb cml">Female</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-en" value="eric"><span class="vn">Eric</span><span class="qb cml">Male</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-en" value="george"><span class="vn">George</span><span class="qb cml">Male, British</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="ra-head">
+          <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
+          <p class="note">Pre-generated with ElevenLabs. Voice is in the menu on the left, currently <strong data-cvname>Bella</strong>.</p>
+        </div>
+      </div>
       <audio id="enAudio" controls preload="none"><source src="audio/en-bella.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
     </div>
 
@@ -422,27 +529,75 @@
     <p class="sub">Urdu is right-to-left, and most devices ship no Urdu voice at all, so the free browser route below usually reports that it cannot speak it. This is not hypothetical for Learn: the lesson <em>Introduction to WordPress</em> is already translated into Urdu in <a href="https://github.com/WordPress/Learn/issues/3613">Learn #3613</a>. The passage below is that reviewed community translation.</p>
     <div class="passage"><p class="ur" id="urPassage" lang="ur" dir="rtl">سلام، اور WordPress کے اس تعارفی سبق میں خوش آمدید۔ اس سبق میں ہم بنیادی باتوں کا جائزہ لیں گے تاکہ آپ سمجھ سکیں کہ WordPress سے کیا کچھ حاصل کیا جا سکتا ہے، چاہے آپ بالکل نئے ہی کیوں نہ ہوں۔</p></div>
 
-    <div class="rowc free splayer" data-state="idle" data-lang="ur" data-textid="urPassage" data-label="Play browser voice">
-      <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
+    <div class="rowc free splayer" data-state="idle" data-lang="ur" data-textid="urPassage" data-label="Play browser voice" data-rate="1" data-vol="1" data-muted="false" data-novoice="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows.">
+      <div class="ra-top">
+          <div class="ra-menu-wrap">
+            <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Language and voice settings" title="Language and voice settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+            </button>
+            <div class="menu" data-menu hidden>
+              <h4>Voice</h4>
+              <div class="vlist" data-vlist></div>
+              <button class="more" type="button" data-act="more" hidden>Show all voices</button>
+            </div>
+          </div>
+        <div class="ra-head">
+          <h3>Browser voice <span class="tag free">Free &middot; on device</span></h3>
+        </div>
+      </div>
       <div class="controls">
         <button class="btn primary" data-act="toggle">&#9654; Play browser voice</button>
         <button class="btn ghost" data-act="restart" hidden>&#8635; Restart</button>
         <button class="btn danger" data-act="stop" hidden>&#9632; Stop</button>
-        <label class="ctl">Voice <select class="voicePicker" data-langfilter="ur"></select></label>
       </div>
-      <p class="status" data-status role="status" aria-live="polite"></p>
+        <div class="seekwrap">
+          <span class="t" data-elapsed>0:00</span>
+          <input type="range" class="seek" min="0" max="1000" step="1" value="0" aria-label="Position">
+          <span class="t right" data-total>0:00</span>
+        </div>
+        <div class="ctlrow">
+          <span class="lbl">Speed</span>
+          <span class="speeds" role="group" aria-label="Playback speed">
+            <button type="button" data-rate="0.5" aria-pressed="false">0.5&times;</button>
+            <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+            <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+            <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+          </span>
+          <span class="vol-wrap">
+            <button class="volbtn" data-act="volmenu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Volume" title="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+            <span class="volpop" data-volpop hidden>
+              <button class="vstep" type="button" data-act="voldown" aria-label="Volume down" title="Volume down">&minus;</button>
+              <input type="range" class="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume level">
+              <button class="vstep" type="button" data-act="volup" aria-label="Volume up" title="Volume up">+</button>
+              <span class="vval" data-volval>100%</span>
+              <button class="vmute" type="button" data-act="mute" aria-pressed="false">Mute</button>
+            </span>
+          </span>
+        </div>
+        <p class="status" data-status role="status" aria-live="polite"></p>
     </div>
 
-    <div class="rowc commercial">
-      <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
-      <p class="note">Pre-generated with ElevenLabs (model Eleven v3, which covers Urdu). Choose a voice:
-        <select class="voiceSelect" data-target="urAudio" data-prefix="ur" aria-label="Urdu commercial voice">
-          <option value="bella">Bella (Female)</option>
-          <option value="sarah">Sarah (Female)</option>
-          <option value="eric">Eric (Male)</option>
-          <option value="george">George (Male)</option>
-        </select>
-      </p>
+    <div class="rowc commercial cvoice" data-prefix="ur" data-target="urAudio">
+      <div class="ra-top">
+        <div class="ra-menu-wrap">
+          <button class="hamb" data-act="menu" type="button" aria-expanded="false" aria-haspopup="true" aria-label="Choose the commercial voice" title="Choose the commercial voice">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+          </button>
+          <div class="menu" data-menu hidden>
+            <h4>Voice</h4>
+            <div class="vlist">
+          <label class="vopt"><input type="radio" name="cvoice-ur" value="bella" checked><span class="vn">Bella</span><span class="qb cml">Female</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-ur" value="sarah"><span class="vn">Sarah</span><span class="qb cml">Female</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-ur" value="eric"><span class="vn">Eric</span><span class="qb cml">Male</span></label>
+          <label class="vopt"><input type="radio" name="cvoice-ur" value="george"><span class="vn">George</span><span class="qb cml">Male</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="ra-head">
+          <h3>Commercial API voice <span class="tag commercial">For comparison only</span></h3>
+          <p class="note">Pre-generated with ElevenLabs (model Eleven v3, which covers Urdu). Voice is in the menu on the left, currently <strong data-cvname>Bella</strong>.</p>
+        </div>
+      </div>
       <audio id="urAudio" controls preload="none"><source src="audio/ur-bella.mp3" type="audio/mpeg">Your browser cannot play this clip.</audio>
     </div>
 
@@ -547,8 +702,10 @@
   var voicesByName = {};
   var WPS = 2.8; /* words per second at rate 1. Only used for the length estimate. */
 
-  var token=0, active=null, curState="idle", needsRestart=false, seeking=false;
+  var token=0, active=null, curState="idle", needsRestart=false;
   var chunks=[], chunkDur=[], chunkStart=[], totalDur=0, curIdx=0;
+  var curOffset=0;   /* char offset into chunks[curIdx] the current utterance starts at */
+  var liveChar=0;    /* char reached inside chunks[curIdx], from boundary events */
   var anchorPos=0, anchorT=0;
   var tickInt=null, uid=0, players=[];
 
@@ -567,7 +724,15 @@
     return out.length?out:[t];
   }
 
-  /* ---- length model. speechSynthesis gives no duration and no seek, so we build both ---- */
+  /* speechSynthesis has no seek, no duration and no currentTime, so both are built here.
+     Seeking works by starting the utterance partway into a sentence, at a word boundary. */
+  function snapToWord(s,i){
+    if(!s) return 0;
+    if(i<=0) return 0;
+    if(i>=s.length){ var k=s.length-1; while(k>0 && s.charAt(k-1)!==" ") k--; return k; }
+    var j=i; while(j>0 && s.charAt(j-1)!==" ") j--;
+    return j;
+  }
   function measure(rate){
     chunkDur=[]; chunkStart=[]; totalDur=0;
     for(var i=0;i<chunks.length;i++){ chunkStart.push(totalDur); var d=durOf(chunks[i],rate); chunkDur.push(d); totalDur+=d; }
@@ -575,7 +740,15 @@
   function estTotal(text,rate){ var cs=chunkText(text),t=0; for(var i=0;i<cs.length;i++) t+=durOf(cs[i],rate); return t; }
   function startsFor(cs,rate){ var a=[],acc=0; for(var i=0;i<cs.length;i++){ a.push(acc); acc+=durOf(cs[i],rate); } return a; }
   function idxForTime(starts,t){ var idx=0; for(var i=0;i<starts.length;i++){ if(t>=starts[i]) idx=i; else break; } return idx; }
-
+  function offsetForTime(text,dur,within){
+    if(!text.length||dur<=0) return 0;
+    var f=within/dur; if(f<0)f=0; if(f>1)f=1;
+    return snapToWord(text, Math.floor(f*text.length));
+  }
+  function posOf(idx,off){
+    var full=chunks[idx]||"";
+    return chunkStart[idx] + (full.length?(Math.min(off,full.length)/full.length)*chunkDur[idx]:0);
+  }
   function position(){
     if(!chunks.length) return 0;
     if(curIdx>=chunks.length) return totalDur;
@@ -584,13 +757,12 @@
     if(w<0) w=0;
     return Math.min(chunkStart[curIdx]+w, totalDur);
   }
-
   function stopTicker(){ if(tickInt){clearInterval(tickInt);tickInt=null;} }
   function startTicker(p){ stopTicker(); function upd(){ p.paint(position(), totalDur); } upd(); tickInt=setInterval(upd,120); }
 
   function stopAll(){
     token++; curState="idle"; needsRestart=false; stopTicker();
-    curIdx=0; anchorPos=0; anchorT=Date.now();
+    curIdx=0; curOffset=0; liveChar=0; anchorPos=0; anchorT=Date.now();
     chunks=[]; chunkDur=[]; chunkStart=[]; totalDur=0;
     var prev=active; active=null;
     if(supported){ try{synth.cancel();}catch(e){} }
@@ -606,21 +778,29 @@
         p.render("idle","Finished, "+fmt(totalDur));
         p.paint(totalDur,totalDur); p.showNext(); return;
       }
-      var idx=curIdx, txt=chunks[idx];
+      var idx=curIdx, full=chunks[idx];
+      var off=Math.max(0, Math.min(curOffset, full.length));
+      var txt = off>0 ? full.slice(off) : full;
+      if(!txt.replace(/\s/g,"")){ curIdx=idx+1; curOffset=0; liveChar=0; next(); return; }
       var u=new SpeechSynthesisUtterance(txt);
       var o=p.getOpts();
       u.lang=o.lang; if(o.voice)u.voice=o.voice;
       u.rate=o.rate||1;
       u.volume=(typeof o.volume==="number"&&!isNaN(o.volume))?o.volume:1;
-      anchorPos=0; anchorT=Date.now();
-      /* word boundary events anchor the bar to real speech rather than a stopwatch */
+      liveChar=off;
+      anchorPos = full.length ? (off/full.length)*chunkDur[idx] : 0;
+      anchorT=Date.now();
+      /* word boundary events keep the bar on real speech rather than a stopwatch */
       u.onboundary=function(e){
-        if(mine!==token||curIdx!==idx||!txt.length) return;
+        if(mine!==token||curIdx!==idx||!full.length) return;
         if(typeof e.charIndex!=="number") return;
-        var f=e.charIndex/txt.length; if(f<0)f=0; if(f>1)f=1;
+        var abs=off+e.charIndex;
+        if(abs>full.length) abs=full.length;
+        liveChar=abs;
+        var f=abs/full.length; if(f<0)f=0; if(f>1)f=1;
         anchorPos=f*chunkDur[idx]; anchorT=Date.now();
       };
-      u.onend=function(){ if(mine!==token)return; curIdx=idx+1; anchorPos=0; anchorT=Date.now(); next(); };
+      u.onend=function(){ if(mine!==token)return; curIdx=idx+1; curOffset=0; liveChar=0; anchorPos=0; anchorT=Date.now(); next(); };
       u.onerror=function(e){
         if(mine!==token)return;
         var err=e&&e.error; if(err==="interrupted"||err==="canceled")return;
@@ -631,13 +811,16 @@
     })();
   }
 
-  function start(p, fromIdx){
+  function start(p, fromIdx, fromOff){
     stopAll();
     chunks=chunkText(p.getText());
     if(!chunks.length){ p.render("idle","Nothing to read.",true); return; }
     measure(p.getRate());
     curIdx=Math.max(0, Math.min(fromIdx||0, chunks.length-1));
-    anchorPos=0; anchorT=Date.now();
+    curOffset=Math.max(0, Math.min(fromOff||0, chunks[curIdx].length));
+    liveChar=curOffset;
+    anchorPos=posOf(curIdx,curOffset)-chunkStart[curIdx];
+    anchorT=Date.now();
     active=p; curState="playing"; needsRestart=false;
     p.render("playing"); p.hideNext(); startTicker(p);
     token++;
@@ -661,32 +844,38 @@
         try{synth.cancel();}catch(e){} try{synth.resume();}catch(e){}
         setTimeout(function(){ if(active===p&&curState==="playing") speakLoop(p); },40);
       } else { try{synth.resume();}catch(e){} }
-    } else { start(p,0); }
+    } else { start(p,0,0); }
   }
 
-  /* seek. Restarts at the nearest sentence, because the API cannot resume mid-utterance. */
+  /* Seek to a point in time. Lands on the nearest word, not the nearest sentence. */
   function seekTo(p, seconds){
     if(active!==p||!chunks.length) return;
     var t=Math.max(0,Math.min(seconds,totalDur));
     var idx=idxForTime(chunkStart,t);
-    curIdx=idx; anchorPos=0; anchorT=Date.now();
+    var full=chunks[idx];
+    var off=offsetForTime(full, chunkDur[idx], t-chunkStart[idx]);
+    curIdx=idx; curOffset=off; liveChar=off;
+    anchorPos=posOf(idx,off)-chunkStart[idx];
+    anchorT=Date.now();
     token++;
     try{ synth.cancel(); }catch(e){}
     if(curState==="playing"){
       try{ synth.resume(); }catch(e){}
       setTimeout(function(){ if(active===p&&curState==="playing") speakLoop(p); },40);
-      p.setStatus("Jumped to sentence "+(idx+1)+" of "+chunks.length);
-    } else {
-      needsRestart=true;
-      p.setStatus("Paused at sentence "+(idx+1)+" of "+chunks.length);
-    }
+    } else { needsRestart=true; }
     p.paint(position(),totalDur);
+    p.setStatus((curState==="playing"?"Playing from ":"Paused at ")+fmt(position())+" of "+fmt(totalDur));
   }
 
+  /* A voice, speed or volume change restarts the current sentence from the word already reached. */
   function liveChange(p, remeasure){
     if(active!==p){ p.primeBar(); return; }
     if(remeasure){ measure(p.getRate()); if(curIdx>chunks.length-1) curIdx=chunks.length-1; }
-    anchorPos=0; anchorT=Date.now();
+    var full=chunks[curIdx]||"";
+    curOffset=snapToWord(full, Math.min(liveChar, full.length));
+    liveChar=curOffset;
+    anchorPos=posOf(curIdx,curOffset)-chunkStart[curIdx];
+    anchorT=Date.now();
     if(curState==="playing"){
       token++;
       try{ synth.cancel(); }catch(e){} try{ synth.resume(); }catch(e){}
@@ -698,9 +887,9 @@
     p.paint(position(),totalDur);
   }
   var liveTimer=null;
-  function liveChangeDebounced(p,remeasure){ if(liveTimer)clearTimeout(liveTimer); liveTimer=setTimeout(function(){ liveChange(p,remeasure); },140); }
+  function liveChangeDebounced(p,remeasure){ if(liveTimer)clearTimeout(liveTimer); liveTimer=setTimeout(function(){ liveChange(p,remeasure); },160); }
 
-  /* ---- voice quality ranking. This is the practical answer to the robotic-voice question. ---- */
+  /* ---- voice quality ranking. The practical answer to the robotic-voice question. ---- */
   function scoreVoice(v){
     var n=((v.name||"")+" "+(v.voiceURI||""));
     var s=0;
@@ -729,43 +918,47 @@
     if(/google/i.test(n)||v.localService===false) return ["onl","Online"];
     return null;
   }
-
   function langName(code){ try{ var dn=new Intl.DisplayNames([navigator.language||"en"],{type:"language"}); var n=dn.of(code.split("-")[0]); if(n && n.toLowerCase()!==code.split("-")[0].toLowerCase()) return n; }catch(e){} return code; }
   function shortVoiceLabel(v){ var n=v.name; n=n.replace(/\s*[-\u2013\u2014].*$/,""); n=n.replace(/\s*\([^)]*\)\s*/g," "); n=n.replace(/\s+/g," ").trim(); if(!n) n=v.name; return n+" \u00b7 "+v.lang; }
   function rebuildVoiceIndex(){ voicesByName={}; synth.getVoices().forEach(function(v){ voicesByName[v.name]=v; }); }
 
-  function fillPicker(sel, filter){
-    var all=synth.getVoices();
-    var list=(filter==="auto")?all:all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
-    var keep=sel.value; sel.innerHTML="";
-    if(!list.length){ var o=document.createElement("option"); o.value=""; o.textContent=(filter==="auto"?"No voices found":"No "+filter.toUpperCase()+" voice on this device"); sel.appendChild(o); sel.disabled=true; return false; }
-    sel.disabled=false;
-    rankVoices(list).forEach(function(v){ var o=document.createElement("option"); o.value=v.name; o.textContent=shortVoiceLabel(v); sel.appendChild(o); });
-    if(keep && voicesByName[keep] && Array.prototype.some.call(sel.options,function(op){return op.value===keep;})) sel.value=keep;
-    return true;
+  function filterFor(panel){
+    var lp=panel.querySelector(".langPicker");
+    if(lp && lp.value) return lp.value;
+    var m=panel.getAttribute("data-lang");
+    return m==="ur" ? "ur" : "en";
   }
-
+  function voicesFor(filter){
+    var all=synth.getVoices();
+    if(filter==="auto") return all;
+    return all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(String(filter).toLowerCase())===0; });
+  }
   function fillLangPicker(sel){
-    var all=synth.getVoices(); var langs={}; all.forEach(function(v){ if(v.lang) langs[v.lang]=(langs[v.lang]||0)+1; });
+    var all=synth.getVoices(), langs={};
+    all.forEach(function(v){ if(v.lang) langs[v.lang]=(langs[v.lang]||0)+1; });
     var codes=Object.keys(langs).sort(function(a,b){ return langName(a).localeCompare(langName(b)); });
     var keep=sel.value; sel.innerHTML="";
     codes.forEach(function(c){ var o=document.createElement("option"); o.value=c; o.textContent=langName(c)+" ("+c+")"; sel.appendChild(o); });
     if(keep && langs[keep]) sel.value=keep;
-    else{ var nav=(navigator.language||"en-US"); if(langs[nav]) sel.value=nav; else{ var base=nav.split("-")[0]; var m=codes.filter(function(c){return c.toLowerCase().indexOf(base.toLowerCase())===0;})[0]; if(m) sel.value=m; else if(codes.indexOf("en-US")>=0) sel.value="en-US"; } }
+    else{ var nav=(navigator.language||"en-US");
+      if(langs[nav]) sel.value=nav;
+      else{ var base=nav.split("-")[0];
+        var m=codes.filter(function(c){return c.toLowerCase().indexOf(base.toLowerCase())===0;})[0];
+        if(m) sel.value=m; else if(codes.indexOf("en-US")>=0) sel.value="en-US"; } }
     return codes.length;
   }
 
   /* ---- the hamburger menu: the best four voices on this device, ranked ---- */
-  function buildMenu(p,panel,filter){
+  function buildMenu(p,panel){
     var vlist=panel.querySelector("[data-vlist]");
     var moreBtn=panel.querySelector('[data-act="more"]');
     if(!vlist) return -1;
-    var all=synth.getVoices();
-    var list=(filter==="auto")?all:all.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf(filter.toLowerCase())===0; });
+    var filter=filterFor(panel);
+    var list=voicesFor(filter);
     vlist.innerHTML="";
     if(!list.length){
       var none=document.createElement("p"); none.className="none";
-      none.textContent="No "+String(filter).toUpperCase()+" voice is installed on this device.";
+      none.textContent="No voice for "+langName(String(filter))+" is installed on this device.";
       vlist.appendChild(none);
       if(moreBtn) moreBtn.hidden=true;
       panel.removeAttribute("data-voice");
@@ -790,14 +983,40 @@
       vlist.appendChild(lab);
     });
     if(moreBtn){
-      if(ranked.length>4){ moreBtn.hidden=false; moreBtn.textContent=showAll?"Show the best 4 only":("Show all "+ranked.length+" voices on this device"); }
+      if(ranked.length>4){ moreBtn.hidden=false; moreBtn.textContent=showAll?"Show the best 4 only":("Show all "+ranked.length+" voices for this language"); }
       else moreBtn.hidden=true;
     }
     return ranked.length;
   }
 
-  var SPK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
-  var MUT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+  function closeAllPop(except){
+    document.querySelectorAll("[data-menu]").forEach(function(m){
+      if(m===except) return; m.hidden=true;
+      var h=m.parentNode.querySelector('[data-act="menu"]'); if(h) h.setAttribute("aria-expanded","false");
+    });
+    document.querySelectorAll("[data-volpop]").forEach(function(m){
+      if(m===except) return; m.hidden=true;
+      var h=m.parentNode.querySelector('[data-act="volmenu"]'); if(h) h.setAttribute("aria-expanded","false");
+    });
+  }
+
+  /* Centre a popover on its button, then clamp it inside the viewport.
+     Needed because the volume button wraps to a different place at narrow widths. */
+  function placePop(pop, mode){
+    pop.style.transform="none"; pop.style.right="auto"; pop.style.left="0px";
+    var wrap=pop.parentNode.getBoundingClientRect();
+    var w=pop.offsetWidth, vw=document.documentElement.clientWidth, pad=8;
+    /* the hamburger sits at the left of its card, so its menu aligns left;
+       the volume button can wrap anywhere, so its popover centres on the button */
+    var want = (mode==="center") ? (wrap.left + wrap.width/2 - w/2) : wrap.left;
+    if(want+w > vw-pad) want = vw-pad-w;
+    if(want < pad) want = pad;
+    pop.style.left=(want-wrap.left)+"px";
+  }
+
+  var SPK_HI='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+  var SPK_LO='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>';
+  var SPK_MU='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
 
   function makePlayer(panel){
     panel.setAttribute("data-uid", String(++uid));
@@ -810,15 +1029,18 @@
     var stopb=panel.querySelector('[data-act="stop"]');
     var nextBtn=panel.querySelector(".nextlesson");
     var status=panel.querySelector("[data-status]");
-    var picker=panel.querySelector(".voicePicker");
     var langSel=panel.querySelector(".langPicker");
-    var rateSlider=panel.querySelector("input.rate");
-    var volSlider=panel.querySelector("input.volume");
     var speeds=panel.querySelector(".speeds");
-    var muteBtn=panel.querySelector('[data-act="mute"]');
     var hamb=panel.querySelector('[data-act="menu"]');
     var menu=panel.querySelector("[data-menu]");
     var moreBtn=panel.querySelector('[data-act="more"]');
+    var volBtn=panel.querySelector('[data-act="volmenu"]');
+    var volPop=panel.querySelector("[data-volpop]");
+    var volDown=panel.querySelector('[data-act="voldown"]');
+    var volUp=panel.querySelector('[data-act="volup"]');
+    var volSlider=panel.querySelector("input.volume");
+    var volVal=panel.querySelector("[data-volval]");
+    var muteBtn=panel.querySelector('[data-act="mute"]');
     var seekEl=panel.querySelector("input.seek");
     var elapsedEl=panel.querySelector("[data-elapsed]");
     var totalEl=panel.querySelector("[data-total]");
@@ -827,19 +1049,15 @@
     var mode=panel.getAttribute("data-lang");
     var label=panel.getAttribute("data-label")||"Play";
     var nextSpec=panel.getAttribute("data-next");
-    var vfilter = picker ? picker.getAttribute("data-langfilter") : (mode==="auto"?"auto":(mode==="ur"?"ur":"en"));
+    var isSeeking=false;
 
     var p={
       getText:function(){ if(textarea) return textarea.value; var el=textid&&document.getElementById(textid); return el?el.textContent:""; },
       getRate:function(){ return parseFloat(panel.getAttribute("data-rate"))||1; },
       getVolume:function(){ if(panel.getAttribute("data-muted")==="true") return 0; var v=parseFloat(panel.getAttribute("data-vol")); return isNaN(v)?1:v; },
-      currentVoice:function(){
-        if(picker && picker.value) return voicesByName[picker.value]||null;
-        var n=panel.getAttribute("data-voice");
-        return n?(voicesByName[n]||null):null;
-      },
+      currentVoice:function(){ var n=panel.getAttribute("data-voice"); return n?(voicesByName[n]||null):null; },
       getOpts:function(){
-        var l = mode==="auto" ? ((langSel&&langSel.value)||"en-US") : (mode==="ur"?"ur-PK":"en-US");
+        var l = (langSel&&langSel.value) ? langSel.value : (mode==="ur"?"ur-PK":"en-US");
         var v=this.currentVoice(); if(v) l=v.lang;
         return { lang:l, voice:v, rate:this.getRate(), volume:this.getVolume() };
       },
@@ -854,122 +1072,125 @@
       paint:function(pos,total){
         if(elapsedEl) elapsedEl.textContent=fmt(pos);
         if(totalEl) totalEl.textContent=fmt(total);
-        if(seekEl && !seeking) seekEl.value = total>0 ? String(Math.round((pos/total)*1000)) : "0";
+        if(seekEl && !isSeeking) seekEl.value = total>0 ? String(Math.round((pos/total)*1000)) : "0";
       },
       primeBar:function(){
         if(!seekEl && !totalEl) return;
         var t=estTotal(this.getText(), this.getRate());
         if(elapsedEl) elapsedEl.textContent="0:00";
         if(totalEl) totalEl.textContent=fmt(t);
-        if(seekEl && !seeking) seekEl.value="0";
+        if(seekEl && !isSeeking) seekEl.value="0";
       },
       showNext:function(){ if(nextBtn) nextBtn.hidden=false; },
       hideNext:function(){ if(nextBtn) nextBtn.hidden=true; }
     };
 
-    function setMuted(m){
-      panel.setAttribute("data-muted", m?"true":"false");
-      if(muteBtn){
-        muteBtn.setAttribute("data-muted", m?"true":"false");
-        muteBtn.innerHTML = m?MUT:SPK;
-        muteBtn.setAttribute("aria-label", m?"Unmute":"Mute");
-        muteBtn.title = m?"Unmute":"Mute";
+    function applyVol(v, muted, live){
+      v=Math.max(0,Math.min(1, isNaN(v)?1:v));
+      panel.setAttribute("data-vol", String(v));
+      panel.setAttribute("data-muted", muted?"true":"false");
+      if(volSlider) volSlider.value=String(v);
+      if(volVal) volVal.textContent=Math.round(v*100)+"%";
+      if(volDown) volDown.disabled = (v<=0);
+      if(volUp) volUp.disabled = (v>=1);
+      if(volBtn){
+        volBtn.innerHTML = (muted||v<=0) ? SPK_MU : (v<0.5 ? SPK_LO : SPK_HI);
+        volBtn.setAttribute("data-muted", muted?"true":"false");
+        var lbl = muted ? "Volume, muted" : ("Volume "+Math.round(v*100)+"%");
+        volBtn.setAttribute("aria-label", lbl); volBtn.title=lbl;
       }
+      if(muteBtn){ muteBtn.setAttribute("aria-pressed", muted?"true":"false"); muteBtn.textContent = muted?"Unmute":"Mute"; }
+      if(live && active===p) liveChangeDebounced(p,false);
     }
-    function closeMenu(){ if(menu) menu.hidden=true; if(hamb) hamb.setAttribute("aria-expanded","false"); }
-    function openMenu(){
-      document.querySelectorAll("[data-menu]").forEach(function(m){
-        if(m!==menu){ m.hidden=true; var h=m.parentNode.querySelector('[data-act="menu"]'); if(h) h.setAttribute("aria-expanded","false"); }
-      });
-      buildMenu(p,panel,vfilter);
-      if(menu) menu.hidden=false;
-      if(hamb) hamb.setAttribute("aria-expanded","true");
-    }
+    function curVol(){ var v=parseFloat(panel.getAttribute("data-vol")); return isNaN(v)?1:v; }
+    function isMuted(){ return panel.getAttribute("data-muted")==="true"; }
 
     if(primary) primary.addEventListener("click",function(){ toggle(p); });
-    if(restart) restart.addEventListener("click",function(){ start(p,0); });
+    if(restart) restart.addEventListener("click",function(){ start(p,0,0); });
     if(stopb) stopb.addEventListener("click",function(){ if(active===p) stopAll(); else { p.render("idle",""); p.hideNext(); p.primeBar(); } });
     if(nextBtn && nextSpec) nextBtn.addEventListener("click",function(){
       if(nextSpec.indexOf("scroll:")===0){ var t=document.querySelector(nextSpec.slice(7)); if(t) t.scrollIntoView({behavior:"smooth",block:"start"}); }
       else if(nextSpec.indexOf("href:")===0){ window.open(nextSpec.slice(5),"_blank","noopener"); }
     });
 
-    /* speed presets */
     if(speeds) speeds.addEventListener("click",function(ev){
       var b=ev.target.closest("button[data-rate]"); if(!b) return;
-      var r=parseFloat(b.getAttribute("data-rate"))||1;
-      panel.setAttribute("data-rate",String(r));
+      panel.setAttribute("data-rate", String(parseFloat(b.getAttribute("data-rate"))||1));
       Array.prototype.forEach.call(speeds.querySelectorAll("button[data-rate]"),function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
       if(active===p) liveChange(p,true); else p.primeBar();
     });
-    /* legacy rate slider, still used by the universal tester */
-    if(rateSlider) rateSlider.addEventListener("input",function(){
-      panel.setAttribute("data-rate",String(parseFloat(rateSlider.value)||1));
-      if(active===p) liveChangeDebounced(p,true); else p.primeBar();
-    });
-    /* volume slider, in the menu on the lesson players and inline on the tester */
-    if(volSlider) volSlider.addEventListener("input",function(){
-      panel.setAttribute("data-vol",String(parseFloat(volSlider.value)));
-      if(panel.getAttribute("data-muted")==="true") setMuted(false);
-      if(active===p) liveChangeDebounced(p,false);
-    });
-    if(muteBtn) muteBtn.addEventListener("click",function(){
-      setMuted(panel.getAttribute("data-muted")!=="true");
-      if(active===p) liveChange(p,false);
-    });
 
-    if(hamb) hamb.addEventListener("click",function(ev){ ev.stopPropagation(); if(menu && menu.hidden) openMenu(); else closeMenu(); });
+    if(volBtn) volBtn.addEventListener("click",function(ev){
+      ev.stopPropagation();
+      if(volPop && volPop.hidden){ closeAllPop(volPop); volPop.hidden=false; placePop(volPop,"center"); volBtn.setAttribute("aria-expanded","true"); }
+      else if(volPop){ volPop.hidden=true; volBtn.setAttribute("aria-expanded","false"); }
+    });
+    if(volPop) volPop.addEventListener("click",function(ev){ ev.stopPropagation(); });
+    if(volDown) volDown.addEventListener("click",function(){ applyVol(Math.round((curVol()-0.1)*100)/100, false, true); });
+    if(volUp) volUp.addEventListener("click",function(){ applyVol(Math.round((curVol()+0.1)*100)/100, false, true); });
+    if(volSlider) volSlider.addEventListener("input",function(){ applyVol(parseFloat(volSlider.value), false, true); });
+    if(muteBtn) muteBtn.addEventListener("click",function(ev){ ev.stopPropagation(); applyVol(curVol(), !isMuted(), true); });
+
+    if(hamb) hamb.addEventListener("click",function(ev){
+      ev.stopPropagation();
+      if(menu && menu.hidden){ closeAllPop(menu); buildMenu(p,panel); menu.hidden=false; placePop(menu,"left"); hamb.setAttribute("aria-expanded","true"); }
+      else if(menu){ menu.hidden=true; hamb.setAttribute("aria-expanded","false"); }
+    });
     if(menu) menu.addEventListener("click",function(ev){ ev.stopPropagation(); });
     if(moreBtn) moreBtn.addEventListener("click",function(){
       panel.setAttribute("data-showall", panel.getAttribute("data-showall")==="1"?"0":"1");
-      buildMenu(p,panel,vfilter);
+      buildMenu(p,panel);
     });
-    if(menu){
-      document.addEventListener("click",closeMenu);
-      document.addEventListener("keydown",function(e){ if(e.key==="Escape"||e.key==="Esc") closeMenu(); });
-    }
+    if(langSel) langSel.addEventListener("change",function(){
+      panel.removeAttribute("data-voice");
+      buildMenu(p,panel);
+      if(active===p) liveChange(p,false);
+    });
 
     if(seekEl){
-      seekEl.addEventListener("pointerdown",function(){ seeking=true; });
+      var endSeek=function(){
+        var tot=(active===p)?totalDur:estTotal(p.getText(),p.getRate());
+        var t=(parseFloat(seekEl.value)/1000)*tot;
+        isSeeking=false;
+        if(active===p) seekTo(p,t);
+        else {
+          var cs=chunkText(p.getText()), r=p.getRate(), st=startsFor(cs,r);
+          var idx=idxForTime(st,t);
+          start(p, idx, offsetForTime(cs[idx], durOf(cs[idx],r), t-st[idx]));
+        }
+      };
+      seekEl.addEventListener("pointerdown",function(){ isSeeking=true; });
+      seekEl.addEventListener("keydown",function(){ isSeeking=true; });
       seekEl.addEventListener("input",function(){
-        seeking=true;
+        isSeeking=true;
         var tot=(active===p)?totalDur:estTotal(p.getText(),p.getRate());
         if(elapsedEl) elapsedEl.textContent=fmt((parseFloat(seekEl.value)/1000)*tot);
       });
-      seekEl.addEventListener("change",function(){
-        var tot=(active===p)?totalDur:estTotal(p.getText(),p.getRate());
-        var t=(parseFloat(seekEl.value)/1000)*tot;
-        seeking=false;
-        if(active===p) seekTo(p,t);
-        else { var cs=chunkText(p.getText()); start(p, idxForTime(startsFor(cs,p.getRate()), t)); }
-      });
+      seekEl.addEventListener("change",endSeek);
     }
-    if(picker) picker.addEventListener("change",function(){ liveChange(p,false); });
     if(textarea) textarea.addEventListener("input",function(){ if(active!==p) p.primeBar(); });
 
-    setMuted(panel.getAttribute("data-muted")==="true");
+    applyVol(curVol(), isMuted(), false);
     p.render("idle","");
     p.primeBar();
-    players.push({p:p, panel:panel, filter:vfilter});
+    players.push({p:p, panel:panel});
     return p;
   }
 
   function populateAll(){
     rebuildVoiceIndex();
     document.querySelectorAll(".langPicker").forEach(function(s){ fillLangPicker(s); });
-    document.querySelectorAll(".voicePicker").forEach(function(s){
-      var f=s.getAttribute("data-langfilter");
-      if(f==="auto"){ var sp=s.closest(".splayer"); var lp=sp?sp.querySelector(".langPicker"):null; fillPicker(s, lp?lp.value:"auto"); }
-      else fillPicker(s,f);
-    });
     players.forEach(function(rec){
       if(!rec.panel.querySelector("[data-vlist]")) return;
-      var n=buildMenu(rec.p, rec.panel, rec.filter);
+      var n=buildMenu(rec.p, rec.panel);
       if(rec.panel.getAttribute("data-state")==="idle"){
         var st=rec.panel.querySelector("[data-status]");
         if(st){
-          if(n===0){ st.textContent="This device has no "+String(rec.filter).toUpperCase()+" voice installed, so the free browser route cannot read this lesson."; st.classList.add("err"); }
-          else if(st.classList.contains("err")){ st.textContent=""; st.classList.remove("err"); }
+          if(n===0){
+            st.textContent = rec.panel.getAttribute("data-novoice") ||
+              ("This device has no voice for "+langName(String(filterFor(rec.panel)))+" installed, so the free browser route cannot read this one.");
+            st.classList.add("err");
+          } else if(st.classList.contains("err")){ st.textContent=""; st.classList.remove("err"); }
         }
       }
       rec.p.primeBar();
@@ -979,44 +1200,50 @@
       var all=synth.getVoices(), langs={};
       all.forEach(function(v){ langs[v.lang]=1; });
       var n=all.length, m=Object.keys(langs).length;
-      summary.textContent = n?("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them below."):"No speech voices were detected in this browser.";
+      summary.textContent = n?("Detected "+n+" voice"+(n>1?"s":"")+" across "+m+" language"+(m>1?"s":"")+" installed in your browser. Pick any of them from the menu below."):"No speech voices were detected in this browser.";
     }
   }
 
   if(!supported){
-    document.querySelectorAll(".status").forEach(function(el){ el.textContent="This browser does not support the Web Speech API, so the free browser route is unavailable here."; el.classList.add("err"); });
-    document.querySelectorAll("button.primary, .speeds button, button.volbtn, button.hamb").forEach(function(b){ b.disabled=true; });
-    document.querySelectorAll("input.seek").forEach(function(s){ s.disabled=true; });
+    document.querySelectorAll(".splayer .status").forEach(function(el){ el.textContent="This browser does not support the Web Speech API, so the free browser route is unavailable here."; el.classList.add("err"); });
+    document.querySelectorAll(".splayer button.primary, .splayer .speeds button, .splayer button.volbtn, .splayer button.hamb, .splayer button.vstep, .splayer button.vmute").forEach(function(b){ b.disabled=true; });
+    document.querySelectorAll(".splayer input.seek").forEach(function(s){ s.disabled=true; });
     var ds=document.getElementById("detectSummary"); if(ds) ds.textContent="This browser does not support on-device speech (Web Speech API).";
   } else {
     document.querySelectorAll(".splayer").forEach(function(panel){ makePlayer(panel); });
-    document.querySelectorAll(".langPicker").forEach(function(lp){
-      lp.addEventListener("change",function(){
-        var sp=lp.closest(".splayer");
-        var vp=sp?sp.querySelector('.voicePicker[data-langfilter="auto"]'):null;
-        if(vp) fillPicker(vp, lp.value);
-      });
-    });
     populateAll();
     if(typeof synth.onvoiceschanged!=="undefined"){ synth.onvoiceschanged=populateAll; }
     setTimeout(populateAll,300);
-    setTimeout(function(){
-      document.querySelectorAll('.voicePicker[data-langfilter="ur"]').forEach(function(s){
-        if(s.disabled){
-          var sp=s.closest(".splayer"); var st=sp?sp.querySelector("[data-status]"):null;
-          if(st){ st.textContent="This device has no Urdu voice installed, so the free browser route cannot speak it. That is exactly the gap this sample shows."; st.classList.add("err"); }
-        }
-      });
-    },500);
+    setTimeout(populateAll,900);
   }
 
-  /* commercial voice choosers */
-  document.querySelectorAll(".voiceSelect").forEach(function(sel){
-    sel.addEventListener("change",function(){
-      var audio=document.getElementById(sel.getAttribute("data-target")); if(!audio) return;
-      var playing=!audio.paused && !audio.ended;
-      audio.src="audio/"+sel.getAttribute("data-prefix")+"-"+sel.value+".mp3";
-      audio.load(); if(playing){ audio.play().catch(function(){}); }
+  document.addEventListener("click",function(){ closeAllPop(null); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"||e.key==="Esc") closeAllPop(null); });
+
+  /* commercial voice rows: the same hamburger menu, over a fixed list of pre-generated clips */
+  document.querySelectorAll(".cvoice").forEach(function(row){
+    var hamb=row.querySelector('[data-act="menu"]');
+    var menu=row.querySelector("[data-menu]");
+    var nameEl=row.querySelector("[data-cvname]");
+    var prefix=row.getAttribute("data-prefix");
+    var audio=document.getElementById(row.getAttribute("data-target"));
+    if(hamb&&menu){
+      hamb.addEventListener("click",function(ev){
+        ev.stopPropagation();
+        if(menu.hidden){ closeAllPop(menu); menu.hidden=false; placePop(menu,"left"); hamb.setAttribute("aria-expanded","true"); }
+        else { menu.hidden=true; hamb.setAttribute("aria-expanded","false"); }
+      });
+      menu.addEventListener("click",function(ev){ ev.stopPropagation(); });
+    }
+    row.querySelectorAll('input[type="radio"]').forEach(function(r){
+      r.addEventListener("change",function(){
+        if(!r.checked||!audio) return;
+        var lab=r.parentNode.querySelector(".vn");
+        if(nameEl&&lab) nameEl.textContent=lab.textContent;
+        var playing=!audio.paused && !audio.ended;
+        audio.src="audio/"+prefix+"-"+r.value+".mp3";
+        audio.load(); if(playing){ audio.play().catch(function(){}); }
+      });
     });
   });
   document.querySelectorAll("audio").forEach(function(a){
